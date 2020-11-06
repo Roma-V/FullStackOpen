@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+const Button = ({text, onclickEvent}) => ( <button onClick={onclickEvent}>{text}</button> )
+
 const Statistic = ({text, value, units}) => (
   <tr>
     <td>{text}</td>
@@ -42,9 +44,9 @@ const App = () => {
   return (
     <div>
       <h1>Give feedback</h1>
-      <button onClick={onGoodClick}>good</button> 
-      <button onClick={onNeutralClick}>neutral</button> 
-      <button onClick={onBadClick}>bad</button>
+      <Button text="good" onclickEvent={onGoodClick} />
+      <Button text="neutral" onclickEvent={onNeutralClick} />
+      <Button text="bad" onclickEvent={onBadClick} />
       <h1>Statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
