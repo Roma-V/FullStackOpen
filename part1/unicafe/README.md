@@ -1,3 +1,3 @@
 # FullStackOpen Part 1 excercises
 This folder contains excercises for part 1:
-courseinfo: Ex. 1.1-1.5
+unicafe: Ex. 1.6-1.11
