@@ -19,3 +19,11 @@ The last three excersices comprise diagrams of signal flow when the example web 
 ![Screenshot](part0/Single_page_app.png?raw=true "Single page app")
 0.6: New note
 ![Screenshot](part0/Single_page_app-new_note.png?raw=true "New note")
+
+Part 1:
+Ex. 1.1-1.5
+[courseinfo](part0/courseinfo/)
+Ex. 1.6-1.11
+[unicafe](part0/unicafe/)
+Ex. 1.12
+[anecdotes](part0/anecdotes/)

@@ -1,0 +1,8 @@
+{
+  "short_name": "Anecdotes React App",
+  "name": "Anecdotes React App",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
