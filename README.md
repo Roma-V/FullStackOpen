@@ -20,10 +20,13 @@ The last three excersices comprise diagrams of signal flow when the example web 
 0.6: New note
 ![Screenshot](part0/Single_page_app-new_note.png?raw=true "New note")
 
-Part 1:
-Ex. 1.1-1.5
-[courseinfo](part0/courseinfo/)
-Ex. 1.6-1.11
-[unicafe](part0/unicafe/)
-Ex. 1.12
-[anecdotes](part0/anecdotes/)
+Part 1:\
+Ex. 1.1-1.5\
+[courseinfo](part1/courseinfo/)\
+A page that shows course information. All logic resides in [index.js](part1/courseinfo/src/index.js).\
+Ex. 1.6-1.11\
+[unicafe](part1/unicafe/)\
+A page that gathers feedback and provides statistics. All logic resides in [index.js](part1/unicafe/src/index.js).\
+Ex. 1.12\
+[anecdotes](part1/anecdotes/)\
+A page that shows a random anecdote and provides voting capability. A max voted anecdoted is shown as well. All logic resides in [index.js](part1/anecdotes/src/index.js).\
