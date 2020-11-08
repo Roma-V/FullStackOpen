@@ -30,3 +30,9 @@ A page that gathers feedback and provides statistics. All logic resides in [inde
 Ex. 1.12\
 [anecdotes](part1/anecdotes/)\
 A page that shows a random anecdote and provides voting capability. A max voted anecdoted is shown as well. All logic resides in [index.js](part1/anecdotes/src/index.js).\
+
+Part 2:\
+Ex. 2.1-2.5\
+[courseinfo](part2/courseinfo/)\
+A page that shows course information. All logic resides in [index.js](part2/courseinfo/src/index.js).\
+The part 1 code is refactored to render courses from arrays. The *Course* component is placed into a separate module [Course.js](part2/courseinfo/src/components/Course.js).
