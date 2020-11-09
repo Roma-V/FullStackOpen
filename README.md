@@ -36,3 +36,8 @@ Ex. 2.1-2.5\
 [courseinfo](part2/courseinfo/)\
 A page that shows course information. All logic resides in [index.js](part2/courseinfo/src/index.js).\
 The part 1 code is refactored to render courses from arrays. The *Course* component is placed into a separate module [Course.js](part2/courseinfo/src/components/Course.js).
+Ex. 2.6-2.10\
+[phonebook](part2/phonebook/)\
+A page that shows a list of contacts. A contact card contains a name and a phone number.\
+Form fields provide capability to add new contacts and filter existing ones by namy.\
+All logic resides in [App.js](part2/phonebook/src/App.js) with the *App* component expotred for use in the [index.js](part2/phonebook/src/index.js).\
