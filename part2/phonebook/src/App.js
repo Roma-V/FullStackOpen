@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import contactService from './services/contacts'
 
 // Main App component
 const App = () => {
   const [ persons, setPersons ] = useState([])
+  // Handle communication with server
   const loadData = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-      console.log('Data recieved', response)
-      setPersons(response.data)
+    contactService.getAll()
+      .then(contacts => {
+      console.log('Data recieved', contacts)
+      setPersons(contacts)
     })
   }
   useEffect(loadData, [])
@@ -21,17 +21,56 @@ const App = () => {
     event.preventDefault()
     if (!newName) return
 
-    if (persons.find(person => person.name === newName)) {
-        alert(`${newName} is already added to phonebook`)
-        return
+    const existingPerson = persons.find(person => person.name === newName)
+    if (existingPerson) {
+      const result = window.confirm(`${newName} is already in phonebook. Replace the old number with a new one?`)
+      if (result) {
+        const updatePerson = {...existingPerson, number: newNumber}
+        contactService.changeContact(updatePerson)
+          .then(updatedContact => {
+            console.log('updated contact', updatedContact)
+            setPersons(persons.map(contact => contact.id !== updatedContact.id ? contact : updatedContact))
+            setNewName('')
+            setNewNumber('')
+        })
+      }
+      return
     }
 
     console.log('add contact:', newName)
-    setPersons(persons.concat({name: newName, number: newNumber}))
-    setNewName('')
-    setNewNumber('')
+    const newContact = {name: newName, number: newNumber}
+    contactService.createContact(newContact)
+      .then(contact => {
+        setPersons(persons.concat(contact))
+        setNewName('')
+        setNewNumber('')
+    })
   }
 
+  const deleteContact = (id) => {
+    return event => {
+        event.preventDefault()
+
+        const name = persons.find(person => person.id === id).name
+        const result = window.confirm(`This will delete ${name}. Are you sure?`)
+        if (!result)
+          return
+
+        console.log('delete contact:', id)
+        contactService.deleteContact(id)
+          .then(response => {
+            console.log(response.statusText);
+            if (response.status === 200) {
+              setPersons(persons.filter(contact => contact.id !== id))
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    }
+  }
+
+  // Handle UI events
   const handleFilterName = (event) => {
     setFilterName(event.target.value)
   }
@@ -44,6 +83,7 @@ const App = () => {
       setNewNumber(event.target.value)
   }
 
+  // Render
   return (
     <div>
       <h2>Phonebook</h2>
@@ -56,7 +96,7 @@ const App = () => {
         submitCallback={addContact}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} filter={filterName} />
+      <Persons persons={persons} filter={filterName} deleteCallback={deleteContact} />
     </div>
   )
 }
@@ -80,15 +120,18 @@ const PersonForm = ({ name, number, nameCallback, numberCallback, submitCallback
         </div>
     </form>
 )
-const Persons = ({ persons, filter }) => (
+const Persons = ({ persons, filter, deleteCallback }) => (
     <div>
         {persons.map((person) => (filter !== '' && !person.name.toLowerCase().includes(filter.toLowerCase()))
             ? ''
-            : <li key={person.name}>{person.name} {person.number}</li>)}
+            : <Person key={person.id} person={person} deleteCallback={deleteCallback} />)}
     </div>
 )
-const Person = ({ person }) => (
-    <li key={person.name}>{person.name} {person.number}</li>
+const Person = ({ person, deleteCallback }) => (
+    <li>
+      {person.name} {person.number}
+      <button onClick={deleteCallback(person.id)}>delete</button>
+    </li>
 )
 
 export default App

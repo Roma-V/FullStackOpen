@@ -37,13 +37,15 @@ Ex. 2.1-2.5\
 A page that shows course information. All logic resides in [index.js](part2/courseinfo/src/index.js).\
 The part 1 code is refactored to render courses from arrays. The *Course* component is placed into a separate module [Course.js](part2/courseinfo/src/components/Course.js).\
 
-Ex. 2.6-2.10\
+Ex. 2.6-2.11, 2.15-2.18\
 [phonebook](part2/phonebook/)\
 A page that shows a list of contacts. A contact card contains a name and a phone number.\
-Form fields provide capability to add new contacts and filter existing ones by name.\
-All logic resides in [App.js](part2/phonebook/src/App.js) with the *App* component expotred for use in the [index.js](part2/phonebook/src/index.js).\
+Form fields provide capability to add new contacts, change and delete existing ones and perform filtering by name.\
+The data is retrieved from and put to server with RESTful API.\
+Main logic resides in [App.js](part2/phonebook/src/App.js) with the *App* component expotred for use in the [index.js](part2/phonebook/src/index.js).\
+Server communication is handled with [contacts.js](part2/phonebook/src/services/contacts.js) script that utilizes *axios* library.\
 
-Ex. 2.11\
+Ex. 2.11-2.14\
 [countries](part2/countries/)\
 A page loads data from https://restcountries.eu and presents it based on filter query.\
 All logic resides in [App.js](part2/countries/src/App.js) with the *App* component expotred for use in the [index.js](part2/countries/src/index.js).
