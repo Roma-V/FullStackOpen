@@ -6,12 +6,36 @@ body {
   padding: 10px;
 }
 
-li {
-  list-style: none;
-  padding-left: 0;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h2 {
+  color: green;
+  font-style: italic;
+}
+
+.error, .notification {
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.notification {
+  color: green;
+}
+
+.person {
+  list-style: none;
+  padding-left: 0;
+  padding-top: 3px;
+  font-size: 15px;
 }

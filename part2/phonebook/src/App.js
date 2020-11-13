@@ -15,7 +15,13 @@ const App = () => {
   useEffect(loadData, [])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const clearInputs = () => {
+    setNewName('')
+    setNewNumber('')
+  }
   const [ filterName, setFilterName ] = useState('')
+  const [ message, setMessage ]  = useState(null)
+  const [ messageType, setMessageType ]  = useState('notification')
 
   const addContact = (event) => {
     event.preventDefault()
@@ -29,10 +35,15 @@ const App = () => {
         contactService.changeContact(updatePerson)
           .then(updatedContact => {
             console.log('updated contact', updatedContact)
+            notify(`Changed number for ${updatedContact.name}`, 'notification')
+            
             setPersons(persons.map(contact => contact.id !== updatedContact.id ? contact : updatedContact))
-            setNewName('')
-            setNewNumber('')
-        })
+            clearInputs()
+          }, error => {
+            console.log(error.toString())
+            notify(`Cannot change number for ${newName}`, 'error')
+            loadData()
+          })
       }
       return
     }
@@ -41,9 +52,9 @@ const App = () => {
     const newContact = {name: newName, number: newNumber}
     contactService.createContact(newContact)
       .then(contact => {
+        notify(`Added ${contact.name}`, 'notification')
         setPersons(persons.concat(contact))
-        setNewName('')
-        setNewNumber('')
+        clearInputs()
     })
   }
 
@@ -66,8 +77,19 @@ const App = () => {
           })
           .catch(error => {
             console.log(error);
+            notify(`Cannot delete ${name}`, 'error')
+            loadData()
           })
     }
+  }
+
+  // Notifications
+  const notify = (message, type, duration = 3000) => {
+    setMessageType(type)
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+    }, duration)
   }
 
   // Handle UI events
@@ -87,6 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} type={messageType} />
       <Filter name={filterName} callback={handleFilterName} />
       <h3> Add new</h3>
       <PersonForm name={newName}
@@ -128,10 +151,22 @@ const Persons = ({ persons, filter, deleteCallback }) => (
     </div>
 )
 const Person = ({ person, deleteCallback }) => (
-    <li>
+    <li className='person'>
       {person.name} {person.number}
       <button onClick={deleteCallback(person.id)}>delete</button>
     </li>
 )
+
+const Notification = ({ message, type }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={type}>
+      {message}
+    </div>
+  )
+}
 
 export default App
