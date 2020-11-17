@@ -71,7 +71,7 @@ const App = () => {
         contactService.deleteContact(id)
           .then(response => {
             console.log(response.statusText);
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 204) {
               setPersons(persons.filter(contact => contact.id !== id))
             }
           })
