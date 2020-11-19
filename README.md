@@ -50,3 +50,18 @@ Ex. 2.11-2.14\
 [countries](part2/countries/)\
 A page loads data from https://restcountries.eu and presents it based on filter query.\
 All logic resides in [App.js](part2/countries/src/App.js) with the *App* component expotred for use in the [index.js](part2/countries/src/index.js).
+
+Ex. 3.1-3.8\
+[phonebook_backend](part3/phonebook_backend)\
+This folder contains backend for contacts app.\
+
+Ex. 3.9-3.11\
+[phonebook_backend](part3/phonebook_backend)\
+The backend is ties up with frontend part and deployed to:
+https://phonebook-rv.herokuapp.com/
+
+Ex. 3.12-3.18
+[phonebook_backend](part3/phonebook_backend)\
+The backend is linked to a cloud MongoDB.\
+Data is retireved from MongoDB and is served further with RESTful API.\
+Database connection is made in a separate module. Node.js routes utilize MongoDB API to fetch/post/update/delet the content.
