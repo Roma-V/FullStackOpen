@@ -45,53 +45,41 @@ app.get('/info', (request, response) => {
     })
 })
   
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
-  
-    if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'content missing' 
-      })
-    }
 
-    db.exists({name: body.name}).then(personExists => {
-      if (personExists) {
-        return response.status(400).json({ 
-            error: 'name must be unique' 
-        })
-      } else {
-        const person = new db({
-          name: body.name,
-          number: body.number || ''
-        })
-        
-        person.save().then(saved => {
-          response.json(saved)
-        })
-      }
+    const person = new db({
+      name: body.name,
+      number: body.number
     })
+    
+    person.save()
+      .then(saved => {
+        response.json(saved.toJSON())
+      })
+      .catch(error => next(error))
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'content missing' 
-    })
-  }
-
-  db.exists({name: body.name}).then(personExists => {
-    if (personExists) {
-      db.findByIdAndUpdate(request.params.id, body, {new: true})
-        .then(updatedRecord => {
-          console.log('person data updated', updatedRecord)
-          response.json(updatedRecord)
-        })
-    } else {
-      return response.status(404).end()
-    }
+  const person = new db({
+    name: body.name,
+    number: body.number
   })
+  
+  db.findByIdAndUpdate(request.params.id, 
+    body, 
+    {
+      new: true, 
+      runValidators: true, 
+      context: 'query'
+    })
+    .then(updatedRecord => {
+      console.log('person data updated', updatedRecord)
+      response.json(updatedRecord)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -116,6 +104,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message })
   }
 
   next(error)

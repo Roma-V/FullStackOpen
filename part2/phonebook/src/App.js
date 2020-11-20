@@ -39,10 +39,10 @@ const App = () => {
             
             setPersons(persons.map(contact => contact.id !== updatedContact.id ? contact : updatedContact))
             clearInputs()
-          }, error => {
-            console.log(error.toString())
-            notify(`Cannot change number for ${newName}`, 'error')
-            loadData()
+          })
+          .catch(error => {
+            console.log(error.response.data)
+            notify(error.response.data.error, 'error')
           })
       }
       return
@@ -55,7 +55,11 @@ const App = () => {
         notify(`Added ${contact.name}`, 'notification')
         setPersons(persons.concat(contact))
         clearInputs()
-    })
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        notify(error.response.data.error, 'error')
+      })
   }
 
   const deleteContact = (id) => {
