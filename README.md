@@ -1,7 +1,7 @@
 # FullStackOpen
 A repo for FullStackOpen course excercises
 
-Part 0:
+## Part 0
 Mozilla excercises are done and even though not required the files are added to the repo.\
 0.1: HTML
 [index.html](part0/index.html)
@@ -20,7 +20,7 @@ The last three excersices comprise diagrams of signal flow when the example web 
 0.6: New note
 ![Screenshot](part0/Single_page_app-new_note.png?raw=true "New note")
 
-Part 1:\
+## Part 1
 Ex. 1.1-1.5\
 [courseinfo](part1/courseinfo/)\
 A page that shows course information. All logic resides in [index.js](part1/courseinfo/src/index.js).\
@@ -31,7 +31,7 @@ Ex. 1.12\
 [anecdotes](part1/anecdotes/)\
 A page that shows a random anecdote and provides voting capability. A max voted anecdoted is shown as well. All logic resides in [index.js](part1/anecdotes/src/index.js).\
 
-Part 2:\
+## Part 2
 Ex. 2.1-2.5\
 [courseinfo](part2/courseinfo/)\
 A page that shows course information. All logic resides in [index.js](part2/courseinfo/src/index.js).\
@@ -51,6 +51,7 @@ Ex. 2.11-2.14\
 A page loads data from https://restcountries.eu and presents it based on filter query.\
 All logic resides in [App.js](part2/countries/src/App.js) with the *App* component expotred for use in the [index.js](part2/countries/src/index.js).
 
+## Part 3
 Ex. 3.1-3.8\
 [phonebook_backend](part3/phonebook_backend)\
 This folder contains backend for contacts app.\
@@ -58,10 +59,15 @@ This folder contains backend for contacts app.\
 Ex. 3.9-3.11\
 [phonebook_backend](part3/phonebook_backend)\
 The backend is ties up with frontend part and deployed to:
-https://phonebook-rv.herokuapp.com/
+[deployed to heroku](https://phonebook-rv.herokuapp.com/)
 
 Ex. 3.12-3.18
 [phonebook_backend](part3/phonebook_backend)\
 The backend is linked to a cloud MongoDB.\
 Data is retireved from MongoDB and is served further with RESTful API.\
 Database connection is made in a separate module. Node.js routes utilize MongoDB API to fetch/post/update/delet the content.
+
+Ex. 3.19-3.22
+[phonebook_backend](part3/phonebook_backend)\
+*Mongoose* is configured to perform record validation before submitting is to DB.\
+Code cheking is done with lint.
