@@ -1,0 +1,24 @@
+{
+  "name": "blog_list",
+  "version": "0.0.1",
+  "description": "An app listing interesting blog posts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "lint": "eslint ."
+  },
+  "author": "Roman Vasilyev",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.10.15"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "lint": "^0.7.0"
+  }
+}
