@@ -29,63 +29,50 @@
 /*
  * Imports
  */
-const dotenv = require('dotenv').config()
-const http = require('http')
+const config = require('./utils/config.js')
+const logger = require('./utils/logger.js')
+const middleware = require('./utils/middleware.js')
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 const mongoose = require('mongoose')
+const blogsRouter = require('./controllers/blogs.js')
 
 /*
  * Implementation
  */
-const app = express()
+// DB connection
+logger.info('connecting to', config.MONGODB_URI)
+mongoose.connect(config.MONGODB_URI, 
+  { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+    useFindAndModify: false, 
+    useCreateIndex: true 
+  })
+  .then(result => {
+    logger.info('Connected to DB', result.connections[0].name)
+  })
+  .catch(error => {
+    logger.error('connection to DB failed', error.message)
+  })
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
+// Configure morgan middleware
+morgan.token('body', (req) => {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  }
 })
 
-const Blog = mongoose.model('Blog', blogSchema)
-
-const mongoUrl = process.env.MONGODB_URI
-// const mongoUrl = 'mongodb://localhost:27017'
-mongoose.connect(mongoUrl, 
-    { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true, 
-        useFindAndModify: false, 
-        useCreateIndex: true 
-    })
-    .then(result => {
-        console.log('Connected to DB', result)
-    }).catch(error => {
-        console.log('connection to DB failed', error.message)
-    })
-
+// The app
+const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use('/api/blogs', blogsRouter)
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
-
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
