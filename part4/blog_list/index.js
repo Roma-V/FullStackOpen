@@ -23,7 +23,7 @@
 
 /**
  * @file contains main logic for the Blog List app.
- * @author Roman Vasilyev 
+ * @author Roman Vasilyev
  */
 
 /*
@@ -43,12 +43,12 @@ const blogsRouter = require('./controllers/blogs.js')
  */
 // DB connection
 logger.info('connecting to', config.MONGODB_URI)
-mongoose.connect(config.MONGODB_URI, 
-  { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true, 
-    useFindAndModify: false, 
-    useCreateIndex: true 
+mongoose.connect(config.MONGODB_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
   })
   .then(result => {
     logger.info('Connected to DB', result.connections[0].name)
