@@ -22,20 +22,57 @@
  */
 
 /**
- * @file implements log message system.
+ * @file contains helper functions to test blogs database api.
  * @author Roman Vasilyev
  */
 
-const info = (...params) => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(...params)
-  }
+const Blog = require('../models/blog.js')
+
+// DB entries definition
+const initialBlogs = [
+  {
+    title: 'Fisrt post',
+    author: 'Roma',
+    url: 'https://github.com',
+    likes: 2
+  },
+  {
+    title: 'Second post',
+    author: 'Roma',
+    url: 'https://Google.com',
+    likes: 5
+  },
+]
+
+const anotherBlog = {
+  title: 'Third post',
+  author: 'Jason',
+  url: 'https://yahoo.com',
+  likes: 7
 }
 
-const error = (...params) => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.error(...params)
-  }
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'Fourth post',
+    author: 'Henry',
+    url: 'https://henry.com',
+    likes: 4
+  })
+
+  await blog.save()
+  await blog.remove()
+
+  return blog.id.toString()
 }
 
-module.exports = { info, error }
+const blogsInDb = async () => {
+  const notes = await Blog.find({})
+  return notes.map(blog => blog.toJSON())
+}
+
+module.exports = {
+  initialBlogs,
+  anotherBlog,
+  nonExistingId,
+  blogsInDb
+}

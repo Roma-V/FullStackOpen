@@ -1,0 +1,12 @@
+PUT http://localhost:3003/api/blogs/5fbd5b8f2c5b510fc44f05ec
+Content-Type: application/json
+
+{
+  "likes": "7"
+}
+# {
+#   "title": "One more post",
+#   "author": "Momo",
+#   "url": "https://ya.com",
+#   "likes": "0"
+# }

@@ -22,7 +22,7 @@
  */
 
 /**
- * @file entry point for the server to run the Express app.
+ * @file contains main logic for the Blog List app.
  * @author Roman Vasilyev
  */
 
@@ -31,15 +31,47 @@
  */
 const config = require('./utils/config.js')
 const logger = require('./utils/logger.js')
+const middleware = require('./utils/middleware.js')
+const express = require('express')
+require('express-async-errors')
+const cors = require('cors')
+const morgan = require('morgan')
+const mongoose = require('mongoose')
+const blogsRouter = require('./controllers/blogs.js')
 
 /*
  * Implementation
  */
-const app = require('./app.js')
-const http = require('http')
+// DB connection
+logger.info('connecting to', config.MONGODB_URI)
+mongoose.connect(config.MONGODB_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  })
+  .then(result => {
+    logger.info('Connected to DB', result.connections[0].name)
+  })
+  .catch(error => {
+    logger.error('connection to DB failed', error.message)
+  })
 
-const server = http.createServer(app)
-
-server.listen(config.PORT, () => {
-  logger.info(`Server running on port ${config.PORT}`)
+// Configure morgan middleware
+morgan.token('body', (req) => {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  }
 })
+
+// The app
+const app = express()
+app.use(cors())
+app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use('/api/blogs', blogsRouter)
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
+
+module.exports = app

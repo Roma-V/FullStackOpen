@@ -23,7 +23,7 @@
 
 /**
  * @file implements middlewares for express.
- * @author Roman Vasilyev 
+ * @author Roman Vasilyev
  */
 
 const logger = require('./logger.js')
