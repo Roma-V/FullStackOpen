@@ -27,8 +27,11 @@
  */
 
 const Blog = require('../models/blog.js')
+const User = require('../models/user.js')
 
-// DB entries definition
+/*
+ * Blog entries definition
+ */
 const initialBlogs = [
   {
     title: 'Fisrt post',
@@ -70,9 +73,53 @@ const blogsInDb = async () => {
   return notes.map(blog => blog.toJSON())
 }
 
+/*
+ * User entries definition
+ */
+const initialUsers = [
+  {
+    username: 'j.montanha',
+    name: 'Joseph Montestew',
+    password: 'df72jf73nc'
+  },
+  {
+    username: 'kormac',
+    name: 'Korin Mac',
+    password: '8fjenn38fn'
+  }
+]
+
+const anotherUser = {
+  username: 'Penny',
+  name: 'Penny Jackson',
+  password: '9dnnv245ncv'
+}
+
+const invalidUsers = [
+  {
+    username: 'Mo',
+    name: 'Mo Pavlov',
+    password: '9dnnv245ncv'
+  },
+  {
+    username: 'steamboat',
+    name: 'Bobby Steemson',
+    password: 'v3'
+  }
+]
+
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
 module.exports = {
   initialBlogs,
   anotherBlog,
   nonExistingId,
-  blogsInDb
+  blogsInDb,
+  initialUsers,
+  anotherUser,
+  invalidUsers,
+  usersInDb
 }

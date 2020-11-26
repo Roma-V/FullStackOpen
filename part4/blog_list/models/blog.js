@@ -22,7 +22,7 @@
  */
 
 /**
- * @file implements express router for blogs.
+ * @file implements MongoDB document schema for blogs.
  * @author Roman Vasilyev
  */
 

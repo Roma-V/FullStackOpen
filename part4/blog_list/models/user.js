@@ -22,62 +22,33 @@
  */
 
 /**
- * @file implements express router for blogs.
+ * @file implements MongoDB document schema for users.
  * @author Roman Vasilyev
  */
 
-const blogsRouter = require('express').Router()
-const Blog = require('../models/blog.js')
+const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
-/*
- * GET
- */
-blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
-  response.json(blogs)
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    minlength: [3, 'at least 3 symbols required for username'],
+    unique: true,
+    required: true
+  },
+  name: String,
+  passwordHash: String
 })
 
-blogsRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
-
-  if (blog) {
-    response.json(blog)
-  } else {
-    response.status(404).end()
+userSchema.set('toJSON', {
+  transform: (document, returnObj) => {
+    returnObj.id = returnObj._id.toString()
+    delete returnObj._id
+    delete returnObj.__v
+    delete returnObj.passwordHash
   }
 })
 
-/*
- * PUT
- */
-blogsRouter.put('/:id', async (request, response) => {
-  const updatedRecord = await Blog.findByIdAndUpdate(request.params.id,
-    request.body,
-    {
-      new: true,
-      runValidators: true,
-      context: 'query'
-    })
+userSchema.plugin(uniqueValidator)
 
-  response.json(updatedRecord)
-})
-
-/*
- * POST
- */
-blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
-
-  const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
-})
-
-/*
- * DELETE
- */
-blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
-})
-
-module.exports = blogsRouter
+module.exports = mongoose.model('User', userSchema)
