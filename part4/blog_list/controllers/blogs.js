@@ -26,12 +26,28 @@
  * @author Roman Vasilyev
  */
 
+const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog.js')
 const User = require('../models/user.js')
 const logger = require('../utils/logger.js')
 
 const userSchema = { username: 1, name: 1 }
+
+/*
+ * User verification
+ */
+const verifyToken = token => {
+  const decodedToken = jwt.verify(token, process.env.LOGIN_TOKENIZER)
+  if (!token || !decodedToken.id) {
+    const error = Error()
+    error.name = 'JsonWebTokenError'
+    throw error
+  }
+
+  return decodedToken.id
+}
+
 /*
  * GET
  */
@@ -74,7 +90,8 @@ blogsRouter.put('/:id', async (request, response) => {
  * POST
  */
 blogsRouter.post('/', async (request, response) => {
-  const user = await User.findById(request.body.user)
+  const userId = verifyToken(request.token)
+  const user = await User.findById(userId)
 
   const blog = new Blog({ user: user._id, ...request.body })
   const savedBlog = await blog.save()
@@ -89,7 +106,9 @@ blogsRouter.post('/', async (request, response) => {
  * DELETE
  */
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
+  const userId = verifyToken(request.token)
+
+  await Blog.findOneAndRemove({ _id: request.params.id, user: userId })
   response.status(204).end()
 })
 

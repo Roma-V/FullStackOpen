@@ -22,41 +22,36 @@
  */
 
 /**
- * @file implements middlewares for express.
+ * @file implements express router for logging a user in.
  * @author Roman Vasilyev
  */
 
-const logger = require('./logger.js')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const loginRouter = require('express').Router()
+const User = require('../models/user.js')
+const logger = require('../utils/logger.js')
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
+/*
+ * POST
+ */
+loginRouter.post('/', async (request, response) => {
+  const user = await User.findOne({ username: request.body.username })
+  const passwordCorrect = user === null
+    ? false
+    : await bcrypt.compare(request.body.password, user.passwordHash)
 
-const tokenExtractor = (request, response, next) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    request.token = authorization.substring(7)
+  if (!(user && passwordCorrect)) {
+    return response.status(401).json({
+      error: 'invalid credentials'
+    })
   }
 
-  next()
-}
+  const token = jwt.sign({ username: user.username, id: user._id }, process.env.LOGIN_TOKENIZER)
 
-const errorHandler = (error, request, response, next) => {
-  logger.error(error.message)
+  response
+    .status(200)
+    .send({ token, username: user.username })
+})
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
-  } else if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({ error: 'invalid token' })
-  }
-
-  next(error)
-}
-
-module.exports = {
-  unknownEndpoint,
-  tokenExtractor,
-  errorHandler
-}
+module.exports = loginRouter
