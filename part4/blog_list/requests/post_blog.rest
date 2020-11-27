@@ -2,7 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "One more post",
-  "author": "Momo",
-  "url": "https://ya.com"
+  "title": "Sixs posts",
+  "author": "Jack",
+  "user": "5fbfd18bc73000090a2a8fab",
+  "url": "https://oh.com",
+  "likes": "4"
 }
