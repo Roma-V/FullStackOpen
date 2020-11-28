@@ -71,3 +71,16 @@ Ex. 3.19-3.22
 [phonebook_backend](part3/phonebook_backend)\
 *Mongoose* is configured to perform record validation before submitting is to DB.\
 Code cheking is done with lint.
+
+## Part 4
+Ex. 4.1-4.22\
+[bloglist_backend](part4/blog_list)\
+This folder contains backend for blog list app. The app provides api with the following functionality:
+- add users to the database;
+- get ingormation about users;
+- login (required for the actions below);
+- add blog post to a list;
+- get the list of blog posts;
+- update an entry in the list of blog posts;
+- delete blog posts.
+The [tests](part2/blog_list/tests) folder contains unit tests that ensure proper functionality.
