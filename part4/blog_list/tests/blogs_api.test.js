@@ -31,20 +31,48 @@ const testHelper = require('../utils/api_test_helper.js')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app.js')
+const User = require('../models/user.js')
 const Blog = require('../models/blog.js')
 
 // The test app
 const api = supertest(app)
 
 /*
+ * Helper function to get a token for user
+ */
+const tokenFor = async (user) => {
+  const login = await api
+    .post('/api/login')
+    .send(user)
+
+  return login.body.token
+}
+
+/*
  * Setup a function to run before each test
  */
 beforeEach(async () => {
+  await User.deleteMany({})
   await Blog.deleteMany({})
 
-  const blogs = testHelper.initialBlogs.map(blog => new Blog(blog))
-  const promises = blogs.map(blog => blog.save())
-  await Promise.all(promises)
+  for (const user of testHelper.initialUsers) {
+    // Create users
+    await api
+      .post('/api/users')
+      .send(user)
+
+    const userRecord = await User
+      .findOne({ username: user.username })
+
+    // Save blogs
+    for (const blog of testHelper.initialBlogs) {
+      const blogRecord = new Blog({ user: userRecord._id, ...blog })
+      const savedBlog = await blogRecord.save()
+
+      userRecord.blogs = userRecord.blogs.concat(savedBlog._id)
+      await userRecord.save()
+    }
+  }
 })
 
 /*
@@ -61,14 +89,15 @@ describe('When database has initial records,', () => {
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(testHelper.initialBlogs.length)
+    expect(response.body).toHaveLength(
+      testHelper.initialBlogs.length * testHelper.initialUsers.length)
   })
 
   test('a specific blog is within the returned blogs', async () => {
     const response = await api.get('/api/blogs')
 
     const title = response.body.map(r => r.title)
-    expect(title).toContain('Fisrt post')
+    expect(title).toContain(testHelper.initialBlogs[0].title)
   })
 
   test('the data retrieved contains id field', async () => {
@@ -76,6 +105,14 @@ describe('When database has initial records,', () => {
 
     for (const blog of response.body) {
       expect(blog.id).toBeDefined()
+    }
+  })
+
+  test('the data retrieved contains user id field', async () => {
+    const response = await api.get('/api/blogs')
+
+    for (const blog of response.body) {
+      expect(blog.user.id).toBeDefined()
     }
   })
 })
@@ -107,24 +144,46 @@ describe('When a specific record is requested,', () => {
 })
 
 /*
+ * Login
+ */
+describe('When there are users in database,', () => {
+  test('it is possible to login', async () => {
+    await api
+      .post('/api/login')
+      .send({
+        username: testHelper.initialUsers[0].username,
+        password: testHelper.initialUsers[0].password
+      })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
+/*
  * POST
  */
 describe('When new data is added,', () => {
-  test('blogs saved to database', async () => {
+  test('the blog is saved to database', async () => {
+    const token = await tokenFor(testHelper.initialUsers[0])
+
     await api
       .post('/api/blogs')
+      .set('authorization', `bearer ${token}`)
       .send(testHelper.anotherBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const response = await testHelper.blogsInDb()
-    expect(response).toHaveLength(testHelper.initialBlogs.length + 1)
+    expect(response).toHaveLength(
+      testHelper.initialBlogs.length * testHelper.initialUsers.length + 1)
 
     const titles = response.map(r => r.title)
     expect(titles).toContain('Third post')
   })
 
   test('a blog without likes set has 0 of them', async () => {
+    const token = await tokenFor(testHelper.initialUsers[0])
+
     const newBlog = {
       title: 'Third post',
       author: 'Jason',
@@ -133,6 +192,7 @@ describe('When new data is added,', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -141,6 +201,8 @@ describe('When new data is added,', () => {
   })
 
   test('a blog without title is not accepted', async () => {
+    const token = await tokenFor(testHelper.initialUsers[0])
+
     const newBlog = {
       author: 'Jason',
       url: 'https://yahoo.com'
@@ -148,14 +210,18 @@ describe('When new data is added,', () => {
 
     await api
       .post('/api/blogs')
+      .set('authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
     const response = await testHelper.blogsInDb()
-    expect(response).toHaveLength(testHelper.initialBlogs.length)
+    expect(response).toHaveLength(
+      testHelper.initialBlogs.length * testHelper.initialUsers.length)
   })
 
   test('a blog without url is not accepted', async () => {
+    const token = await tokenFor(testHelper.initialUsers[0])
+
     const newBlog = {
       title: 'Third post',
       author: 'Jason'
@@ -163,11 +229,13 @@ describe('When new data is added,', () => {
 
     await api
       .post('/api/blogs')
+      .set('authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
     const response = await testHelper.blogsInDb()
-    expect(response).toHaveLength(testHelper.initialBlogs.length)
+    expect(response).toHaveLength(
+      testHelper.initialBlogs.length * testHelper.initialUsers.length)
   })
 })
 
@@ -175,13 +243,16 @@ describe('When new data is added,', () => {
  * PUT
  */
 describe('When a blog is updated,', () => {
-  test('blog is saved to database', async () => {
+  test('it is saved to database', async () => {
+    const token = await tokenFor(testHelper.initialUsers[0])
+
     let blogs = await api.get('/api/blogs')
     const indexToUpdate = 0
     const newTitle = 'New one'
 
     const updatedRecord = await api
       .put(`/api/blogs/${blogs.body[indexToUpdate].id}`)
+      .set('authorization', `bearer ${token}`)
       .send({ title: newTitle })
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -196,18 +267,22 @@ describe('When a blog is updated,', () => {
  */
 describe('When deletion is requested,', () => {
   test('blog is deleted from database', async () => {
-    let response = await api.get('/api/blogs')
+    const token = await tokenFor(testHelper.initialUsers[0])
+
+    let blogs = await api.get('/api/blogs')
     const indexToDelete = 0
-    const deletedTitle = response.body[indexToDelete].title
+    const deletedId = blogs.body[indexToDelete].id
 
     await api
-      .delete(`/api/blogs/${response.body[indexToDelete].id}`)
+      .delete(`/api/blogs/${blogs.body[indexToDelete].id}`)
+      .set('authorization', `bearer ${token}`)
       .expect(204)
 
-    response = await api.get('/api/blogs')
-    const titles = response.body.map(blog => blog.title)
-    expect(response.body).toHaveLength(testHelper.initialBlogs.length - 1)
-    expect(titles).not.toContain(deletedTitle)
+    const updatedBlogs = await api.get('/api/blogs')
+    const ids = updatedBlogs.body.map(blog => blog.ids)
+    expect(updatedBlogs.body).toHaveLength(
+      testHelper.initialBlogs.length * testHelper.initialUsers.length - 1)
+    expect(ids).not.toContain(deletedId)
   })
 })
 

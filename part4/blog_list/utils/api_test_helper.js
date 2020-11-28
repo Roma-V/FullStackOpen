@@ -29,6 +29,23 @@
 const Blog = require('../models/blog.js')
 const User = require('../models/user.js')
 
+
+/*
+ * User entries definition
+ */
+const initialUsers = [
+  {
+    username: 'j.montanha',
+    name: 'Joseph Montestew',
+    password: 'df72jf73nc'
+  },
+  {
+    username: 'kormac',
+    name: 'Korin Mac',
+    password: '8fjenn38fn'
+  }
+]
+
 /*
  * Blog entries definition
  */
@@ -72,22 +89,6 @@ const blogsInDb = async () => {
   const notes = await Blog.find({})
   return notes.map(blog => blog.toJSON())
 }
-
-/*
- * User entries definition
- */
-const initialUsers = [
-  {
-    username: 'j.montanha',
-    name: 'Joseph Montestew',
-    password: 'df72jf73nc'
-  },
-  {
-    username: 'kormac',
-    name: 'Korin Mac',
-    password: '8fjenn38fn'
-  }
-]
 
 const anotherUser = {
   username: 'Penny',

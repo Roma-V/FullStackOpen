@@ -80,32 +80,6 @@ describe('When database has initial records,', () => {
   })
 })
 
-// describe('When a specific record is requested,', () => {
-//   test('it is reachable with id', async () => {
-//     const response = await api.get('/api/blogs')
-//     const ids = response.body.map(blog => blog.id)
-
-//     for (const id of ids) {
-//       await api
-//         .get(`/api/blogs/${id}`)
-//         .expect(200)
-//         .expect('Content-Type', /application\/json/)
-//     }
-//   })
-
-//   test('if id is valid but non-existant, status 404 is returned ', async () => {
-//     await api
-//       .get(`/api/blogs/${testHelper.nonExistingId}`)
-//       .expect(404)
-//   })
-
-//   test('if id is not valid, status 400 is returned ', async () => {
-//     await api
-//       .get('/api/blogs/5fbd5c89f7dd00102b17b20')
-//       .expect(400)
-//   })
-// })
-
 /*
  * POST
  */
@@ -149,46 +123,6 @@ describe('When new data is added,', () => {
     }
   })
 })
-
-/*
- * PUT
- */
-// describe('When a blog is updated,', () => {
-//   test('blog is saved to database', async () => {
-//     let blogs = await api.get('/api/blogs')
-//     const indexToUpdate = 0
-//     const newTitle = 'New one'
-
-//     const updatedRecord = await api
-//       .put(`/api/blogs/${blogs.body[indexToUpdate].id}`)
-//       .send({ title: newTitle })
-//       .expect(200)
-//       .expect('Content-Type', /application\/json/)
-
-//     expect(updatedRecord.body.title).toEqual(newTitle)
-//   })
-// })
-
-
-/*
- * DELETE
- */
-// describe('When deletion is requested,', () => {
-//   test('blog is deleted from database', async () => {
-//     let response = await api.get('/api/blogs')
-//     const indexToDelete = 0
-//     const deletedTitle = response.body[indexToDelete].title
-
-//     await api
-//       .delete(`/api/blogs/${response.body[indexToDelete].id}`)
-//       .expect(204)
-
-//     response = await api.get('/api/blogs')
-//     const titles = response.body.map(blog => blog.title)
-//     expect(response.body).toHaveLength(testHelper.initialBlogs.length - 1)
-//     expect(titles).not.toContain(deletedTitle)
-//   })
-// })
 
 /*
  * Clean up after tests

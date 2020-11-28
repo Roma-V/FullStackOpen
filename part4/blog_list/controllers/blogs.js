@@ -75,6 +75,8 @@ blogsRouter.get('/:id', async (request, response) => {
  * PUT
  */
 blogsRouter.put('/:id', async (request, response) => {
+  verifyToken(request.token)
+
   const updatedRecord = await Blog.findByIdAndUpdate(request.params.id,
     request.body,
     {
