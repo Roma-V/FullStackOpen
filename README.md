@@ -83,4 +83,4 @@ This folder contains backend for blog list app. The app provides api with the fo
 - get the list of blog posts;
 - update an entry in the list of blog posts;
 - delete blog posts.
-The [tests](part2/blog_list/tests) folder contains unit tests that ensure proper functionality.
+The [tests](part4/blog_list/tests) folder contains unit tests that ensure proper functionality.
