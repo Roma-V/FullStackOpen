@@ -22,20 +22,18 @@
  */
 
 /**
- * @file configures variables to use in the app.
+ * @file login services.
  * @author Roman Vasilyev
  */
 
-require('dotenv').config()
+import axios from 'axios'
+import url from './url.js'
 
-const PORT = process.env.PORT || 3003
-// const mongoUrl = 'mongodb://localhost:27017'
-let MONGODB_URI = process.env.MONGODB_URI
+const baseUrl = '/api/login'
 
-if (process.env.NODE_ENV === 'test') {
-  MONGODB_URI = process.env.TEST_MONGODB_URI
+const login = async credentials => {
+  const response = await axios.post(url.hostUrl.concat(baseUrl), credentials)
+  return response.data
 }
-module.exports = {
-  MONGODB_URI,
-  PORT
-}
+
+export default { login }

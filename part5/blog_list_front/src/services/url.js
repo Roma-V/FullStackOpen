@@ -22,20 +22,10 @@
  */
 
 /**
- * @file configures variables to use in the app.
+ * @file url definition.
  * @author Roman Vasilyev
  */
 
-require('dotenv').config()
+const hostUrl = 'http://localhost:3003'
 
-const PORT = process.env.PORT || 3003
-// const mongoUrl = 'mongodb://localhost:27017'
-let MONGODB_URI = process.env.MONGODB_URI
-
-if (process.env.NODE_ENV === 'test') {
-  MONGODB_URI = process.env.TEST_MONGODB_URI
-}
-module.exports = {
-  MONGODB_URI,
-  PORT
-}
+export default { hostUrl }

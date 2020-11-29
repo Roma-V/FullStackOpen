@@ -22,20 +22,32 @@
  */
 
 /**
- * @file configures variables to use in the app.
+ * @file services for managing Blog element.
  * @author Roman Vasilyev
  */
 
-require('dotenv').config()
+import axios from 'axios'
+import url from './url.js'
 
-const PORT = process.env.PORT || 3003
-// const mongoUrl = 'mongodb://localhost:27017'
-let MONGODB_URI = process.env.MONGODB_URI
+const baseUrl = '/api/blogs'
+let token = null
 
-if (process.env.NODE_ENV === 'test') {
-  MONGODB_URI = process.env.TEST_MONGODB_URI
+const setToken = newToken => {
+  token = `bearer ${newToken}`
 }
-module.exports = {
-  MONGODB_URI,
-  PORT
+
+const getAll = () => {
+  const request = axios.get(url.hostUrl.concat(baseUrl))
+  return request.then(response => response.data)
 }
+
+const create = async newBlog => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.post(url.hostUrl.concat(baseUrl), newBlog, config)
+  return response.data
+}
+
+export default { setToken, getAll, create }

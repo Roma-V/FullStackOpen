@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
  * @license
  * Copyright (c) 2020 Example Corporation Inc.
@@ -22,20 +23,42 @@
  */
 
 /**
- * @file configures variables to use in the app.
+ * @file Login form element.
  * @author Roman Vasilyev
  */
 
-require('dotenv').config()
+import React, { useState }from 'react'
 
-const PORT = process.env.PORT || 3003
-// const mongoUrl = 'mongodb://localhost:27017'
-let MONGODB_URI = process.env.MONGODB_URI
+const Login = ({ loginHandler }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-if (process.env.NODE_ENV === 'test') {
-  MONGODB_URI = process.env.TEST_MONGODB_URI
+  return (
+    <div>
+      <h2>Log in to application</h2>
+      <form onSubmit={loginHandler}>
+        <div>
+            username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+            password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  )
 }
-module.exports = {
-  MONGODB_URI,
-  PORT
-}
+
+export default Login

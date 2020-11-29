@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
  * @license
  * Copyright (c) 2020 Example Corporation Inc.
@@ -22,20 +23,48 @@
  */
 
 /**
- * @file configures variables to use in the app.
+ * @file Blog element.
  * @author Roman Vasilyev
  */
 
-require('dotenv').config()
+import React from 'react'
 
-const PORT = process.env.PORT || 3003
-// const mongoUrl = 'mongodb://localhost:27017'
-let MONGODB_URI = process.env.MONGODB_URI
+const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => (
+  <div>
+    <h2>Blogs</h2>
+    <p>
+      {username} logged in
+      <button type="submit" onClick={logoutHandler}>logout</button>
+    </p>
+    <NewBlog submit={newBlogHandler} />
+    <p>The blog posts in database:</p>
+    {blogs.map(blog =>
+      <Blog key={blog.id} blog={blog} />
+    )}
+  </div>
+)
 
-if (process.env.NODE_ENV === 'test') {
-  MONGODB_URI = process.env.TEST_MONGODB_URI
-}
-module.exports = {
-  MONGODB_URI,
-  PORT
-}
+const Blog = ({ blog }) => (
+  <div>
+    {blog.title} - {blog.author}
+  </div>
+)
+
+const NewBlog = ({ submit }) => (
+  <div>
+    <form onSubmit={submit}>
+      <div>
+        Title <input type="text" name="Title"/>
+      </div>
+      <div>
+        Author <input type="text" name="Author"/>
+      </div>
+      <div>
+        URL <input type="text" name="URL"/>
+      </div>
+      <button type="submit">create</button>
+    </form>
+  </div>
+)
+
+export default Blogs
