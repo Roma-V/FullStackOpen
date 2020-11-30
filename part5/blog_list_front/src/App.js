@@ -65,6 +65,7 @@ const App = () => {
     if (loggedUserJSON) {
       const userLogin = JSON.parse(loggedUserJSON)
       setUser(userLogin)
+      blogService.setToken(userLogin.token)
     }
   }, [])
 
@@ -84,7 +85,6 @@ const App = () => {
       )
 
       setUser(userLogin)
-      blogService.setToken(userLogin.token)
     } catch (exception) {
       notify('Wrong credentials', 'error')
     }
@@ -109,13 +109,11 @@ const App = () => {
       url: event.target[2].value
     }
 
-    console.log('add:', newBlog)
-
     try {
-      const newBlog = await blogService.create(newBlog)
+      const savedBlog = await blogService.create(newBlog)
 
-      setBlogs(blogs.concat(newBlog))
-      notify(newBlog.title.concat(' added'), 'notification')
+      setBlogs(blogs.concat(savedBlog))
+      notify(savedBlog.title.concat(' added'), 'notification')
     } catch (exception) {
       notify('Wrong credentials', 'error')
     }

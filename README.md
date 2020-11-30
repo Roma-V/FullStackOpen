@@ -86,5 +86,7 @@ This folder contains backend for blog list app. The app provides api with the fo
 The [tests](part4/blog_list/tests) folder contains unit tests that ensure proper functionality.
 
 ## Part 5
-Ex. 5.1-...\
+Ex. 5.1-5.4\
 [bloglist_frontend](part5/blog_list_front)\
+The frontend part of the app shows login component if required. For a logged in user a promt to add a new blog is displayed followed by a list of all blog posts in database.\
+The backend from part4 is used by means of communication through REST API.
