@@ -54,9 +54,10 @@ const App = () => {
    */
   // Fetch blogs from API
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService.getAll()
+      .then(blogs =>
+        setBlogs( blogs )
+      )
   }, [])
 
   // Fetch blogs from API
@@ -101,14 +102,7 @@ const App = () => {
   }
 
   // Post a new blog to database
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: event.target[0].value,
-      author: event.target[1].value,
-      url: event.target[2].value
-    }
-
+  const handleNewBlog = async (newBlog) => {
     try {
       const savedBlog = await blogService.create(newBlog)
 

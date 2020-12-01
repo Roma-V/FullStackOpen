@@ -27,22 +27,47 @@
  * @author Roman Vasilyev
  */
 
-import React from 'react'
+import { React, useState } from 'react'
+import Togglable from './components/Togglable'
 
-const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => (
-  <div>
-    <h2>Blogs</h2>
-    <p>
-      {username} logged in
-      <button type="submit" onClick={logoutHandler}>logout</button>
-    </p>
-    <NewBlog submit={newBlogHandler} />
-    <p>The blog posts in database:</p>
-    {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-    )}
-  </div>
-)
+const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
+  // Handle visibility of the new blog form
+  const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
+  const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
+  const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
+
+  // Handle new blog for visibility
+  const toggleVisibility = () => {
+    setNewBlogFormVisible(!newBlogFormVisible)
+  }
+
+  // Handle submition of a new blog
+  const addBlog = (newBlog) => {
+    newBlogHandler(newBlog)
+    toggleVisibility()
+  }
+
+  return (
+    <div>
+      <h2>Blogs</h2>
+      <div>
+        {username} logged in
+        <button type="submit" onClick={logoutHandler}>logout</button>
+      </div>
+      <div style={hideWhenVisible}>
+        <button onClick={toggleVisibility}>new blog</button>
+      </div>
+      <div style={showWhenVisible}>
+        <NewBlog submit={addBlog}/>
+        <button onClick={toggleVisibility}>cancel</button>
+      </div>
+      <div>The blog posts in database:</div>
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
+    </div>
+  )
+}
 
 const Blog = ({ blog }) => (
   <div>
@@ -50,21 +75,62 @@ const Blog = ({ blog }) => (
   </div>
 )
 
-const NewBlog = ({ submit }) => (
-  <div>
-    <form onSubmit={submit}>
-      <div>
-        Title <input type="text" name="Title"/>
-      </div>
-      <div>
-        Author <input type="text" name="Author"/>
-      </div>
-      <div>
-        URL <input type="text" name="URL"/>
-      </div>
-      <button type="submit">create</button>
-    </form>
-  </div>
-)
+const NewBlog = ({ submit }) => {
+  // New blog form inputs
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  // Handle submition of a new blog
+  const addBlogHandler = (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+
+    submit(newBlog)
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+  }
+
+  return (
+    <div>
+      <form onSubmit={addBlogHandler}>
+        <div>
+          Title
+          <input
+            type="text"
+            name="Title"
+            value={newTitle}
+            onChange={({ target }) => setNewTitle(target.value)}
+          />
+        </div>
+        <div>
+          Author
+          <input
+            type="text"
+            name="Author"
+            value={newAuthor}
+            onChange={({ target }) => setNewAuthor(target.value)}
+          />
+        </div>
+        <div>
+          URL
+          <input
+            type="text"
+            name="URL"
+            value={newUrl}
+            onChange={({ target }) => setNewUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </div>
+  )
+}
+
 
 export default Blogs
