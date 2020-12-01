@@ -27,8 +27,9 @@
  * @author Roman Vasilyev
  */
 
-import { React, useState } from 'react'
-import Togglable from './components/Togglable'
+import { getSuggestedQuery } from '@testing-library/react'
+import React, { useState } from 'react'
+import Togglable from './Togglable.js'
 
 const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
   // Handle visibility of the new blog form
@@ -36,15 +37,13 @@ const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
   const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
   const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
 
-  // Handle new blog for visibility
-  const toggleVisibility = () => {
-    setNewBlogFormVisible(!newBlogFormVisible)
-  }
+  // Handle visibility
+  const newBlogFormRef = React.createRef()
 
   // Handle submition of a new blog
   const addBlog = (newBlog) => {
     newBlogHandler(newBlog)
-    toggleVisibility()
+    newBlogFormRef.current.toggleVisibility()
   }
 
   return (
@@ -54,13 +53,12 @@ const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
         {username} logged in
         <button type="submit" onClick={logoutHandler}>logout</button>
       </div>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>new blog</button>
-      </div>
-      <div style={showWhenVisible}>
+      <Togglable
+        buttonLabel1='new blog'
+        buttonLabel2='cancel'
+        ref={newBlogFormRef}>
         <NewBlog submit={addBlog}/>
-        <button onClick={toggleVisibility}>cancel</button>
-      </div>
+      </Togglable>
       <div>The blog posts in database:</div>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
@@ -69,9 +67,45 @@ const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
   )
 }
 
-const Blog = ({ blog }) => (
+const Blog = ({ blog }) => {
+  // Handle visibility
+  const blogRef = React.createRef()
+
+  // Visual style
+  const blogStyle = {
+    backgroundColor: 'Cornsilk',
+    border: 'solid',
+    borderWidth: 1,
+    borderColor: 'Burlywood',
+    padding: 5
+  }
+
+  return (
+    <div style={blogStyle}>
+      {blog.title} - {blog.author}
+      <Togglable
+        buttonLabel1='view'
+        buttonLabel2='hide'
+        ref={blogRef}>
+        <BlogDetails blog={blog} />
+      </Togglable>
+    </div>
+  )
+}
+
+const BlogDetails = ({ blog }) => (
   <div>
-    {blog.title} - {blog.author}
+    <div>
+        URL: <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
+    </div>
+    <div>
+        Likes: {blog.likes}
+      <button>like</button>
+    </div>
+    <div>
+        Creator: {blog.user.username}
+    </div>
+    <button>remove</button>
   </div>
 )
 
