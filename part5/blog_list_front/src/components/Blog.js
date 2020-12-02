@@ -31,11 +31,18 @@ import { getSuggestedQuery } from '@testing-library/react'
 import React, { useState } from 'react'
 import Togglable from './Togglable.js'
 
-const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
+const Blogs = ({
+  username,
+  blogs,
+  logoutHandler,
+  newBlogHandler,
+  blogUpdateHandler,
+  blogDeletionHandler
+}) => {
   // Handle visibility of the new blog form
-  const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
-  const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
-  const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
+  // const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
+  // const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
+  // const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
 
   // Handle visibility
   const newBlogFormRef = React.createRef()
@@ -61,13 +68,16 @@ const Blogs = ({ username, blogs, logoutHandler, newBlogHandler }) => {
       </Togglable>
       <div>The blog posts in database:</div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id}
+          blog={blog}
+          update={blogUpdateHandler}
+          deleteBlog={blogDeletionHandler} />
       )}
     </div>
   )
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, update, deleteBlog }) => {
   // Handle visibility
   const blogRef = React.createRef()
 
@@ -87,27 +97,49 @@ const Blog = ({ blog }) => {
         buttonLabel1='view'
         buttonLabel2='hide'
         ref={blogRef}>
-        <BlogDetails blog={blog} />
+        <BlogDetails
+          blog={blog}
+          update={update}
+          deleteBlog={deleteBlog} />
       </Togglable>
     </div>
   )
 }
 
-const BlogDetails = ({ blog }) => (
-  <div>
+const BlogDetails = ({ blog, update, deleteBlog }) => {
+  // Handle likes update
+  const likesHandler = (event) => {
+    event.preventDefault()
+    const updatedBlog = {
+      likes: blog.likes + 1,
+      id: blog.id
+    }
+
+    update(updatedBlog)
+  }
+  // Handle blog deletion
+  const deleteHandler = (event) => {
+    event.preventDefault()
+
+    deleteBlog(blog.id)
+  }
+
+  return (
     <div>
-        URL: <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
+      <div>
+          URL: <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
+      </div>
+      <div>
+          Likes: {blog.likes}
+        <button onClick={likesHandler}>like</button>
+      </div>
+      <div>
+          Creator: {blog.user.username}
+      </div>
+      <button onClick={deleteHandler}>remove</button>
     </div>
-    <div>
-        Likes: {blog.likes}
-      <button>like</button>
-    </div>
-    <div>
-        Creator: {blog.user.username}
-    </div>
-    <button>remove</button>
-  </div>
-)
+  )
+}
 
 const NewBlog = ({ submit }) => {
   // New blog form inputs

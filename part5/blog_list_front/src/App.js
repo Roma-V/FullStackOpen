@@ -56,11 +56,13 @@ const App = () => {
   useEffect(() => {
     blogService.getAll()
       .then(blogs =>
-        setBlogs( blogs )
+        setBlogs( blogs.sort((e1, e2) => {
+          return e2.likes - e1.likes
+        }) )
       )
   }, [])
 
-  // Fetch blogs from API
+  // Handle login info
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -110,6 +112,38 @@ const App = () => {
       notify(savedBlog.title.concat(' added'), 'notification')
     } catch (exception) {
       notify('Wrong credentials', 'error')
+      console.log(exception)
+    }
+  }
+
+  // Put an updated blog to database
+  const handleBlogUpdate = async (blogUpdate) => {
+    try {
+      const updatedBlog = await blogService.put(blogUpdate)
+
+      setBlogs(blogs
+        .map(blog => blog.id === updatedBlog.id ? updatedBlog : blog)
+      )
+      notify(updatedBlog.title.concat(' updated'), 'notification')
+    } catch (exception) {
+      notify('Wrong credentials', 'error')
+      console.log(exception)
+    }
+  }
+
+  // Delete a blog from database
+  const handleBlogDelete = async (blogId) => {
+    try {
+      const status = await blogService.remove(blogId)
+      console.log(status)
+
+      setBlogs(blogs
+        .filter(blog => blog.id !== blogId)
+      )
+      notify(`blog ${blogId} deleted`, 'notification')
+    } catch (exception) {
+      notify('Wrong credentials', 'error')
+      console.log(exception)
     }
   }
 
@@ -134,7 +168,9 @@ const App = () => {
           : <Blogs username={user.username}
             blogs={blogs}
             logoutHandler={handleLogout}
-            newBlogHandler={handleNewBlog} />
+            newBlogHandler={handleNewBlog}
+            blogUpdateHandler={handleBlogUpdate}
+            blogDeletionHandler={handleBlogDelete} />
       }
     </div>
   )

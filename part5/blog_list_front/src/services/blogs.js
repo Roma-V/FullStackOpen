@@ -50,4 +50,31 @@ const create = async newBlog => {
   return response.data
 }
 
-export default { setToken, getAll, create }
+const put = async updateBlog => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const objectToSend = {
+    likes: updateBlog.likes
+  }
+
+  const response = await axios.put(url.hostUrl.concat(baseUrl).concat(`/${updateBlog.id}`), objectToSend, config)
+  return response.data
+}
+
+const remove = async blogId => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.delete(url.hostUrl.concat(baseUrl).concat(`/${blogId}`), config)
+  return response.status
+}
+
+export default {
+  setToken,
+  getAll,
+  create,
+  put,
+  remove
+}
