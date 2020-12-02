@@ -3,14 +3,21 @@ module.exports = {
     'browser': true,
     'commonjs': true,
     'es6': true,
-    'jest': true,
+    'jest/globals': true,
   },
   'plugins': [
-    'react'
+    'react',
+    'jest'
   ],
-  'extends': 'plugin:react/recommended',
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended'
+  ],
   'parserOptions': {
-    'ecmaVersion': 12,
+    'ecmaFeatures': {
+      'jsx': true
+    },
+    'ecmaVersion': 2018,
     'sourceType': 'module'
   },
   'rules': {
@@ -42,6 +49,11 @@ module.exports = {
     'arrow-spacing': [
       'error', { 'before': true, 'after': true }
     ],
-    'no-console': 0
+    'no-console': 0,
+  },
+  'settings': {
+    'react': {
+      'version': 'detect'
+    }
   }
 }

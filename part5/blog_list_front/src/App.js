@@ -121,6 +121,7 @@ const App = () => {
     try {
       const updatedBlog = await blogService.put(blogUpdate)
 
+      console.log(updatedBlog)
       setBlogs(blogs
         .map(blog => blog.id === updatedBlog.id ? updatedBlog : blog)
       )
@@ -135,7 +136,6 @@ const App = () => {
   const handleBlogDelete = async (blogId) => {
     try {
       const status = await blogService.remove(blogId)
-      console.log(status)
 
       setBlogs(blogs
         .filter(blog => blog.id !== blogId)
