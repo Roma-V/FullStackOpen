@@ -91,7 +91,7 @@ const Blog = ({ blog, update, deleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       {blog.title} - {blog.author}
       <Togglable
         buttonLabel1='view'
@@ -200,3 +200,4 @@ const NewBlog = ({ submit }) => {
 
 
 export default Blogs
+export { Blog, NewBlog }
