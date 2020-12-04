@@ -22,10 +22,19 @@
  */
 
 /**
- * @file url definition.
+ * @file implements express router for testing purposes.
  * @author Roman Vasilyev
  */
 
-const hostUrl = 'http://localhost:3003'
+const router = require('express').Router()
+const Blog = require('../models/blog.js')
+const User = require('../models/user.js')
 
-export default { hostUrl }
+router.post('/reset', async (request, response) => {
+  await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  response.status(204).end()
+})
+
+module.exports = router

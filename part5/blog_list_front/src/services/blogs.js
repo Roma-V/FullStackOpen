@@ -27,7 +27,6 @@
  */
 
 import axios from 'axios'
-import url from './url.js'
 
 const baseUrl = '/api/blogs'
 let token = null
@@ -37,7 +36,7 @@ const setToken = newToken => {
 }
 
 const getAll = () => {
-  const request = axios.get(url.hostUrl.concat(baseUrl))
+  const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
@@ -46,7 +45,7 @@ const create = async newBlog => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(url.hostUrl.concat(baseUrl), newBlog, config)
+  const response = await axios.post(baseUrl, newBlog, config)
   return response.data
 }
 
@@ -58,7 +57,7 @@ const put = async updateBlog => {
     likes: updateBlog.likes
   }
 
-  const response = await axios.put(url.hostUrl.concat(baseUrl).concat(`/${updateBlog.id}`), objectToSend, config)
+  const response = await axios.put(baseUrl.concat(`/${updateBlog.id}`), objectToSend, config)
   return response.data
 }
 
@@ -67,7 +66,7 @@ const remove = async blogId => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.delete(url.hostUrl.concat(baseUrl).concat(`/${blogId}`), config)
+  const response = await axios.delete(baseUrl.concat(`/${blogId}`), config)
   return response.status
 }
 
