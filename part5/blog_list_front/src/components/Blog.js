@@ -129,9 +129,9 @@ const BlogDetails = ({ blog, update, deleteBlog }) => {
       <div>
           URL: <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
       </div>
-      <div>
+      <div className="likes">
           Likes: {blog.likes}
-        <button onClick={likesHandler}>like</button>
+        <button className="likeButton" onClick={likesHandler}>like</button>
       </div>
       <div>
           Creator: {blog.user.username}
@@ -192,7 +192,7 @@ const NewBlog = ({ submit }) => {
             onChange={({ target }) => setNewUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <button id="newBlogButton" type="submit">create</button>
       </form>
     </div>
   )
