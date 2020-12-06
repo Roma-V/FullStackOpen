@@ -91,3 +91,8 @@ Ex. 5.1-5.22\
 The frontend part of the app shows login component on start. For a logged in user a list of all blog posts in database is shown. "new blog" button shows a promt to add a new blog. "view" button reveals details of each blog in the list, where it is possible to add a like to a blog or remove it if user is the one who created it.\
 Cypress library is used for end to end testing of the front-end. Multiple test cover various use cases.\
 The backend from part4 is used by means of communication through REST API.
+
+## Part 6
+Ex. 6.1-6.2\
+[unicafe-redux](part6/unicafe-redux)\
+The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far. 
