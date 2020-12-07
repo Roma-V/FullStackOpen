@@ -95,4 +95,7 @@ The backend from part4 is used by means of communication through REST API.
 ## Part 6
 Ex. 6.1-6.2\
 [unicafe-redux](part6/unicafe-redux)\
-The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far. 
+The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far.\
+Ex. 6.3-6.8\
+[redux-anecdotes](part6/redux-anecdotes)\
+The frontend app that shows various anecdotes. In the top there is a from for adding new anecdotes. The list follows. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.
