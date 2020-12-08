@@ -1,11 +1,15 @@
+/**
+ * @file An entry point for Anecdotes App.
+ * @author Roman Vasilyev
+ */
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import './index.css'
 import { Provider } from 'react-redux'
-import App from './App'
-import reducer from './reducers/anecdoteReducer'
+import App from './App.js'
+import store from './reducers/store.js'
 
-const store = createStore(reducer)
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,4 +1,9 @@
-const anecdotesAtStart = [
+/**
+ * @file Redux reducer that stores anecdotes and manages their lifecycle.
+ * @author Roman Vasilyev
+ */
+
+ const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
   'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -20,8 +25,8 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  // console.log('state now: ', state)
+  // console.log('action', action)
 
   switch(action.type) {
     case 'NEW_ANECDOTE':

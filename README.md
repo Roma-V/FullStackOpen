@@ -96,6 +96,10 @@ The backend from part4 is used by means of communication through REST API.
 Ex. 6.1-6.2\
 [unicafe-redux](part6/unicafe-redux)\
 The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far.\
-Ex. 6.3-6.8\
+Ex. 6.3-6.12\
 [redux-anecdotes](part6/redux-anecdotes)\
-The frontend app that shows various anecdotes. In the top there is a from for adding new anecdotes. The list follows. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.
+The frontend app that shows various anecdotes. The app utilizes Redux library to store an array of anecdotes, filter query and notification text. It consists of the following components (from top to bottom):\
+* An initially hidden notification. Upon addition of a new anecdote or voting for a one the notification appears for 5 seconds.
+* A text filter that queries for content of anecdotes and results in showing only matching ones.
+* A from for adding new anecdotes.
+* A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.
