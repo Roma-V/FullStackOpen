@@ -17,16 +17,16 @@ const reducer = (state = null, action) => {
 /*
  * Actions
  */
-export const showNotification = (content) => {
-    return {
-        type: 'SHOW',
-        data: content
-    }
-}
+export const setNotification = (content, duration=5) => {
+    return dispatch => {
+        dispatch({
+            type: 'SHOW',
+            data: content
+        })
 
-export const hideNotification = () => {
-    return {
-        type: 'HIDE'
+        setTimeout(() => {
+            dispatch({ type: 'HIDE' })
+        }, duration*1000)
     }
 }
 

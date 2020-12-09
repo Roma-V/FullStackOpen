@@ -3,6 +3,9 @@
  * @author Roman Vasilyev
  */
 
+import anecdoteServices from '../services/anecdoteServices.js'
+import { setNotification } from './notificationReducer.js'
+
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 export const asObject = (anecdote) => {
@@ -20,39 +23,51 @@ const reducer = (state = [], action) => {
     case 'NEW_ANECDOTE':
       return state.concat(action.data)
     case 'VOTE': {
-      const id = action.data.id
-      const anecdoteToVote = state.find(n => n.id === id)
-      const changedAnecdote = { 
-        ...anecdoteToVote, 
-        votes: anecdoteToVote.votes + 1 
-      }
+      const updatedAnecdote = action.data
       return state.map(note =>
-        note.id !== id ? note : changedAnecdote 
+        note.id !== updatedAnecdote.id ? note : updatedAnecdote 
       )
-     }
+    }
     default:
       return state
   }
 }
 
-export const initAnecdotes = (content) => {
-  return {
-    type: 'INIT_ANECDOTE',
-    data: content
+export const initAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteServices.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTE',
+      data: anecdotes.map(element => element)
+    })
   }
 }
 
 export const createAnecdote = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: content
+  return async dispatch => {
+    const newAnecdote = asObject(content)
+    const savedAnecdote = await anecdoteServices.create(newAnecdote)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: savedAnecdote
+    })
+
+    dispatch(setNotification(`Added: "${savedAnecdote.content}"`), 5)
   }
 }
 
-export const vote = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id }
+export const vote = (anecdoteToUpdate) => {
+  return async dispatch => {
+    const savedAnecdote = await anecdoteServices.update({
+      ...anecdoteToUpdate,
+      votes: anecdoteToUpdate.votes + 1
+    })
+    dispatch({
+      type: 'VOTE',
+      data: savedAnecdote
+    })
+
+    dispatch(setNotification(`Upvote: "${savedAnecdote.content}"`, 5))
   }
 }
 
