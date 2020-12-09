@@ -103,3 +103,6 @@ The frontend app that shows various anecdotes. The app utilizes Redux library to
 * A text filter that queries for content of anecdotes and results in showing only matching ones.
 * A from for adding new anecdotes.
 * A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.
+Ex. 6.13-6.14\
+[redux-anecdotes](part6/redux-anecdotes)\
+The frontend is configured to draw data from json-server. 
