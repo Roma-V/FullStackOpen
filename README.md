@@ -82,7 +82,8 @@ This folder contains backend for blog list app. The app provides api with the fo
 - add blog post to a list;
 - get the list of blog posts;
 - update an entry in the list of blog posts;
-- delete blog posts.
+- delete blog posts.\
+
 The [tests](part4/blog_list/tests) folder contains unit tests that ensure proper functionality.
 
 ## Part 5
@@ -99,13 +100,20 @@ The frontend part of the unicafe offers three buttens to provide feedback, one m
 Ex. 6.3-6.12\
 [redux-anecdotes](part6/redux-anecdotes)\
 The frontend app that shows various anecdotes. The app utilizes Redux library to store an array of anecdotes, filter query and notification text. It consists of the following components (from top to bottom):\
-* An initially hidden notification. Upon addition of a new anecdote or voting for a one the notification appears for 5 seconds.
-* A text filter that queries for content of anecdotes and results in showing only matching ones.
-* A from for adding new anecdotes.
-* A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.\
+- An initially hidden notification. Upon addition of a new anecdote or voting for a one the notification appears for 5 seconds.
+- A text filter that queries for content of anecdotes and results in showing only matching ones.
+- A from for adding new anecdotes.
+- A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.\
+
 Ex. 6.13-6.14\
 [redux-anecdotes](part6/redux-anecdotes)\
 The frontend is configured to draw data from json-server.\
 Ex. 6.15-6.18\
 [redux-anecdotes](part6/redux-anecdotes)\
 Actions are supplemented with thunks to handle async calls to servver. 
+Ex. 6.19-6.21\
+[redux-anecdotes](part6/redux-anecdotes)\
+The AnecdoteList, Filter and AnecdoteForm components are modified to use redux connect function instead of hooks. The Notification component still relies on useSelector hook.\
+In addition fixed the Notification behaviour:
+- 'SHOW' action saves timer ID along with notification content into store;
+- 'HIDE' action check its timer ID vs store and hides the notification only in case of a match.

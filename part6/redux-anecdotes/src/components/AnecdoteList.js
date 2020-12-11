@@ -4,38 +4,44 @@
  */
 
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { vote } from '../reducers/anecdoteReducer.js'
 
-const AnecdoteList = () => {
-  const anecdotes = useSelector(state => {
-    return state.anecdotes.filter(anecdote => {
+const AnecdoteList = props => (
+  <div>
+    {props.anecdotes
+      .sort((a, b) => {
+        return b.votes - a.votes
+      })
+      .map(anecdote =>
+      <div key={anecdote.id} className="anecdote">
+        <div>
+          {anecdote.content}
+        </div>
+        <div>
+          has {anecdote.votes}
+          <button onClick={() => props.vote(anecdote)}>vote</button>
+        </div>
+      </div>
+    )}
+  </div>
+)
+
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: (state.anecdotes.filter(anecdote => {
       return anecdote.content.toLowerCase()
         .includes(state.filter.toLowerCase())
-    })
-  })
-
-  const dispatch = useDispatch()
-
-  return (
-    <div>
-      {anecdotes
-        .sort((a, b) => {
-          return b.votes - a.votes
-        })
-        .map(anecdote =>
-        <div key={anecdote.id} className="anecdote">
-          <div>
-            {anecdote.content}
-          </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => dispatch(vote(anecdote))}>vote</button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+    }))
+  }
 }
 
-export default AnecdoteList
+const mapDispatchToProps = {
+  vote
+}
+
+const ConnectedAnecdoteList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(AnecdoteList)
+export default ConnectedAnecdoteList

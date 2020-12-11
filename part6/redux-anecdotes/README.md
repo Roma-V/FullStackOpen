@@ -1,2 +1,2 @@
 # Blog list App frontend with Create React App
-Exercises 6.3-6.18
+Exercises 6.3-6.21

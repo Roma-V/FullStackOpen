@@ -3,12 +3,20 @@
  * @author Roman Vasilyev
  */
 
-const reducer = (state = null, action) => {
+const hiddenState = {
+    content: null,
+    timerId: null
+}
+
+const reducer = (state = hiddenState, action) => {
     switch(action.type) {
         case 'SHOW':
             return action.data
-        case 'HIDE': 
-            return null
+        case 'HIDE':
+            if (action.data.timerId === state.timerId) {
+                return hiddenState
+            }
+            return state
         default:
             return state
     }
@@ -19,14 +27,23 @@ const reducer = (state = null, action) => {
  */
 export const setNotification = (content, duration=5) => {
     return dispatch => {
+        const timerId = window.setTimeout(() => {
+            dispatch({
+                type: 'HIDE',
+                data: {
+                    content: null,
+                    timerId
+                }
+            })
+        }, duration*1000)
+
         dispatch({
             type: 'SHOW',
-            data: content
+            data: {
+                content,
+                timerId 
+            }
         })
-
-        setTimeout(() => {
-            dispatch({ type: 'HIDE' })
-        }, duration*1000)
     }
 }
 
