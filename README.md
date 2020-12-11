@@ -35,7 +35,7 @@ A page that shows a random anecdote and provides voting capability. A max voted 
 Ex. 2.1-2.5\
 [courseinfo](part2/courseinfo/)\
 A page that shows course information. All logic resides in [index.js](part2/courseinfo/src/index.js).\
-The part 1 code is refactored to render courses from arrays. The *Course* component is placed into a separate module [Course.js](part2/courseinfo/src/components/Course.js).\
+The part 1 code is refactored to render courses from arrays. The *Course* component is placed into a separate module [Course.js](part2/courseinfo/src/components/Course.js).
 
 Ex. 2.6-2.11, 2.15-2.20\
 [phonebook](part2/phonebook/)\
@@ -82,7 +82,7 @@ This folder contains backend for blog list app. The app provides api with the fo
 - add blog post to a list;
 - get the list of blog posts;
 - update an entry in the list of blog posts;
-- delete blog posts.\
+- delete blog posts.
 
 The [tests](part4/blog_list/tests) folder contains unit tests that ensure proper functionality.
 
@@ -96,21 +96,24 @@ The backend from part4 is used by means of communication through REST API.
 ## Part 6
 Ex. 6.1-6.2\
 [unicafe-redux](part6/unicafe-redux)\
-The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far.\
+The frontend part of the unicafe offers three buttens to provide feedback, one more to reset it as well as shows the feedback collected so far.
+
 Ex. 6.3-6.12\
 [redux-anecdotes](part6/redux-anecdotes)\
-The frontend app that shows various anecdotes. The app utilizes Redux library to store an array of anecdotes, filter query and notification text. It consists of the following components (from top to bottom):\
+The frontend app that shows various anecdotes. The app utilizes Redux library to store an array of anecdotes, filter query and notification text. It consists of the following components (from top to bottom):
 - An initially hidden notification. Upon addition of a new anecdote or voting for a one the notification appears for 5 seconds.
 - A text filter that queries for content of anecdotes and results in showing only matching ones.
 - A from for adding new anecdotes.
-- A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.\
+- A list of all anecdotes in the store. A button is provided to vote for each anecdote. Anecdotes are sorted by vote number.
 
 Ex. 6.13-6.14\
 [redux-anecdotes](part6/redux-anecdotes)\
-The frontend is configured to draw data from json-server.\
+The frontend is configured to draw data from json-server.
+
 Ex. 6.15-6.18\
 [redux-anecdotes](part6/redux-anecdotes)\
-Actions are supplemented with thunks to handle async calls to servver. 
+Actions are supplemented with thunks to handle async calls to server.\
+
 Ex. 6.19-6.21\
 [redux-anecdotes](part6/redux-anecdotes)\
 The AnecdoteList, Filter and AnecdoteForm components are modified to use redux connect function instead of hooks. The Notification component still relies on useSelector hook.\
