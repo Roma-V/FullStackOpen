@@ -120,3 +120,13 @@ The AnecdoteList, Filter and AnecdoteForm components are modified to use redux c
 In addition fixed the Notification behaviour:
 - 'SHOW' action saves timer ID along with notification content into store;
 - 'HIDE' action check its timer ID vs store and hides the notification only in case of a match.
+
+# Part 7
+Exercises 7.1-7.3
+[routed-anecdotes](part7/routed-anecdotes)
+The anecdotes app is reworked to utilize react-router library. The topmost element provides navigation bar and the following components are shown below based on the URL:
+- AnecdoteList
+- CreatNew
+- About
+
+A notification is shown when a new anecdote is created.
