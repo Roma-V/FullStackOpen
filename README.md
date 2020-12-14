@@ -130,3 +130,15 @@ The anecdotes app is reworked to utilize react-router library. The topmost eleme
 - About
 
 A notification is shown when a new anecdote is created.
+
+Exercises 7.4-7.6
+[routed-anecdotes](part7/routed-anecdotes)
+The form for creating new anecdotes is updated with a composite custom hook. A reset button is added as well.
+
+Exercise 7.7
+[country-hook](part7/country-hook)
+The country app with custom hooks.
+
+Exercise 7.8
+[ultimate-hooks](part7/ultimate-hooks)
+The notes app combined with phonebook. The app utilizes a general purpose service for communication with the server for both notes and persons. The service is accessed through a custom hook.
