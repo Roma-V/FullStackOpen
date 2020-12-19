@@ -110,8 +110,12 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const userId = verifyToken(request.token)
 
-  await Blog.findOneAndRemove({ _id: request.params.id, user: userId })
-  response.status(204).end()
+  const success = await Blog.findOneAndRemove({ _id: request.params.id, user: userId })
+
+  if (success) response.status(204)
+  else response.status(403)
+
+  response.end()
 })
 
 module.exports = blogsRouter

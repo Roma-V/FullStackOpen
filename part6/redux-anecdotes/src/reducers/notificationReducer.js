@@ -10,9 +10,9 @@ const hiddenState = {
 
 const reducer = (state = hiddenState, action) => {
     switch(action.type) {
-        case 'SHOW':
+        case 'notification/SHOW':
             return action.data
-        case 'HIDE':
+        case 'notification/HIDE':
             if (action.data.timerId === state.timerId) {
                 return hiddenState
             }
@@ -29,7 +29,7 @@ export const setNotification = (content, duration=5) => {
     return dispatch => {
         const timerId = window.setTimeout(() => {
             dispatch({
-                type: 'HIDE',
+                type: 'notification/HIDE',
                 data: {
                     content: null,
                     timerId
@@ -38,7 +38,7 @@ export const setNotification = (content, duration=5) => {
         }, duration*1000)
 
         dispatch({
-            type: 'SHOW',
+            type: 'notification/SHOW',
             data: {
                 content,
                 timerId 

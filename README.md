@@ -122,7 +122,7 @@ In addition fixed the Notification behaviour:
 - 'HIDE' action check its timer ID vs store and hides the notification only in case of a match.
 
 # Part 7
-Exercises 7.1-7.3
+Exercises 7.1-7.3\
 [routed-anecdotes](part7/routed-anecdotes)
 The anecdotes app is reworked to utilize react-router library. The topmost element provides navigation bar and the following components are shown below based on the URL:
 - AnecdoteList
@@ -131,14 +131,21 @@ The anecdotes app is reworked to utilize react-router library. The topmost eleme
 
 A notification is shown when a new anecdote is created.
 
-Exercises 7.4-7.6
+Exercises 7.4-7.6\
 [routed-anecdotes](part7/routed-anecdotes)
 The form for creating new anecdotes is updated with a composite custom hook. A reset button is added as well.
 
-Exercise 7.7
+Exercise 7.7\
 [country-hook](part7/country-hook)
 The country app with custom hooks.
 
-Exercise 7.8
+Exercise 7.8\
 [ultimate-hooks](part7/ultimate-hooks)
 The notes app combined with phonebook. The app utilizes a general purpose service for communication with the server for both notes and persons. The service is accessed through a custom hook.
+
+Ex. 7.9-7.21\
+[bloglist_frontend](part7/blog_list_front)\
+The blog list app from part 5 is refactored to use:
+- Redux
+- Individual views
+- React Router
