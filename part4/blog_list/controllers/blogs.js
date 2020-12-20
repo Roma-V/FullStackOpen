@@ -72,13 +72,39 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 /*
- * PUT
+ * PUT a blog
  */
 blogsRouter.put('/:id', async (request, response) => {
   verifyToken(request.token)
 
   const updatedRecord = await Blog.findByIdAndUpdate(request.params.id,
     request.body,
+    {
+      new: true,
+      runValidators: true,
+      context: 'query'
+    })
+
+  response.json(updatedRecord)
+})
+
+/*
+ * PUT a comment
+ */
+blogsRouter.put('/:id/comments', async (request, response) => {
+  const userId = verifyToken(request.token)
+
+  const commentText = request.body.comment
+  if (!commentText)
+    response.status(400)
+
+  const comment = {
+    author: userId,
+    content: commentText
+  }
+
+  const updatedRecord = await Blog.findByIdAndUpdate(request.params.id,
+    { $push: { comments: comment } },
     {
       new: true,
       runValidators: true,

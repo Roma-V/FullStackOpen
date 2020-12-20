@@ -43,6 +43,15 @@ const put = async updateBlog => {
   return response.data
 }
 
+const putComment = async (blogId, comment) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.put(baseUrl.concat(`/${blogId}/comments`), { comment }, config)
+  return response.data
+}
+
 const remove = async blogId => {
   const config = {
     headers: { Authorization: token },
@@ -61,5 +70,6 @@ export default {
   getAll,
   create,
   put,
+  putComment,
   remove
 }

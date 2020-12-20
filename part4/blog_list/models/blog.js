@@ -46,7 +46,13 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  comments: [
+    {
+      author: String,
+      content: String
+    }
+  ],
 })
 
 blogSchema.set('toJSON', {
@@ -54,6 +60,15 @@ blogSchema.set('toJSON', {
     returnObj.id = returnObj._id.toString()
     delete returnObj._id
     delete returnObj.__v
+
+    if (!returnObj.comments) return
+
+    returnObj.comments = returnObj.comments.map(commentObj => {
+      return {
+        id: commentObj._id,
+        content: commentObj.content
+      }
+    })
   }
 })
 

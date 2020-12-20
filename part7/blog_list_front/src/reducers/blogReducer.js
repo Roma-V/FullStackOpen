@@ -12,7 +12,7 @@ const reducer = (state = [], action) => {
     return action.data
   case 'blog/NEW':
     return state.concat(action.data)
-  case 'blog/LIKE': {
+  case 'blog/UPDATE': {
     const updatedBlog = action.data
     return state.map(blog =>
       blog.id !== updatedBlog.id ? blog : updatedBlog
@@ -41,7 +41,7 @@ export const createBlog = (blog) => {
     // const newAnecdote = asObject(content)
     const savedBlog = await blogServices.create(blog)
     if (!savedBlog) {
-      dispatch(notify(`Cannot create: "${savedBlog.title}"`, 'error'))
+      dispatch(notify(`Cannot create: "${blog.title}"`, 'error'))
       return
     }
 
@@ -66,11 +66,28 @@ export const likeBlog = (blogToUpdate) => {
     }
 
     dispatch({
-      type: 'blog/LIKE',
+      type: 'blog/UPDATE',
       data: savedBlog
     })
 
     dispatch(notify(`Upvote: "${savedBlog.title}"`, 'notification'))
+  }
+}
+
+export const addComment = (blogId, comment) => {
+  return async dispatch => {
+    const savedBlog = await blogServices.putComment(blogId, comment)
+    if (!savedBlog) {
+      dispatch(notify('Failed add the comment', 'error'))
+      return
+    }
+
+    dispatch({
+      type: 'blog/UPDATE',
+      data: savedBlog
+    })
+
+    dispatch(notify(`Commented: "${savedBlog.title}"`, 'notification'))
   }
 }
 

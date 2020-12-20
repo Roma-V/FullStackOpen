@@ -37,6 +37,7 @@ const logger = require('../utils/logger.js')
  */
 loginRouter.post('/', async (request, response) => {
   const user = await User.findOne({ username: request.body.username })
+
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(request.body.password, user.passwordHash)

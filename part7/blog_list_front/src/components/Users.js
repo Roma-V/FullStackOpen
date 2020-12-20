@@ -3,20 +3,10 @@
  * @author Roman Vasilyev
  */
 
-import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-
-import { initUsers } from '../reducers/usersReduser.js'
+import { useSelector } from 'react-redux'
 
 export const Users = () => {
-  const dispatch = useDispatch()
-
-  // Fetch blogs from API
-  useEffect(() => {
-    dispatch(initUsers())
-  }, [])
-
   // Store
   const users = useSelector(state => state.users)
 

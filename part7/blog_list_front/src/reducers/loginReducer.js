@@ -27,14 +27,7 @@ export const login = (credentials) => {
       return
     }
 
-    window.localStorage.setItem(
-      'loggedUser', JSON.stringify(userLogin)
-    )
-
-    dispatch({
-      type: 'user/LOGIN',
-      data: userLogin
-    })
+    dispatch(setUser(userLogin))
   }
 }
 

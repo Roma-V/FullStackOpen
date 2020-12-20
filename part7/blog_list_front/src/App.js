@@ -4,10 +4,17 @@
  */
 
 import React, { useEffect } from 'react'
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Switch,
+  Route,
+  useRouteMatch,
+  NavLink,
+  Redirect
+} from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { login, setUser } from './reducers/loginReducer.js'
+import { setUser, logout } from './reducers/loginReducer.js'
+import { initBlogs } from './reducers/blogReducer.js'
+import { initUsers } from './reducers/usersReduser.js'
 
 import Notification from './components/Notification.js'
 import { Users, UserDetails } from './components/Users.js'
@@ -23,6 +30,20 @@ const App = () => {
   // User login
   const loggedUser = useSelector(state => state.login)
 
+  // Fetch blogs from API
+  useEffect(() => {
+    dispatch(initBlogs())
+  }, [])
+
+  // Fetch users from API
+  useEffect(() => {
+    dispatch(initUsers())
+  }, [])
+
+  // Store state
+  const blogsLoaded = useSelector(state => state.blogs.length > 0)
+  const usersLoaded = useSelector(state => state.users.length > 0)
+
   const userPath = useRouteMatch('/users/:id')
   const blogPath = useRouteMatch('/blogs/:id')
 
@@ -35,13 +56,10 @@ const App = () => {
     }
   }, [])
 
-  // Login the user upon submitting credentials
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    const username = event.target[0].value
-    const password = event.target[1].value
-
-    dispatch(login({ username, password }))
+  // NavBar stype
+  const navBarSyle = {
+    padding: 5,
+    display: 'inline'
   }
 
   /*
@@ -49,20 +67,53 @@ const App = () => {
    */
   return (
     <div>
+      <div>
+        <NavLink to='/' style={navBarSyle}>Blogs</NavLink>
+        <NavLink to='/users' style={navBarSyle}>Users</NavLink>
+        {
+          loggedUser === null
+            ? ''
+            : <div style={navBarSyle}>
+              {loggedUser.username} logged in
+              <button type="submit" onClick={() => dispatch(logout())}>logout</button>
+            </div>
+        }
+      </div>
       <Notification />
       <Switch>
-        <Route path='/users/:id'>
-          <UserDetails userId={userPath ? userPath.params.id: null} />
-        </Route>
-        <Route path='/blogs/:id'>
-          <BlogDetails blogId={blogPath ? blogPath.params.id: null} />
-        </Route>
-        <Route path='/'>
-          <Users />
+        <Route path='/login'>
           {
             loggedUser === null
-              ? <Login loginHandler={handleLogin} />
-              : <Blogs username={loggedUser.username} />
+              ? <Login />
+              : <Redirect to="/" />
+          }
+        </Route>
+        <Route path='/users/:id'>
+          {
+            usersLoaded
+              ? <UserDetails userId={userPath ? userPath.params.id: null} />
+              : <Redirect to="/" />
+          }
+        </Route>
+        <Route path='/blogs/:id'>
+          {
+            blogsLoaded
+              ? <BlogDetails blogId={blogPath ? blogPath.params.id: null} />
+              : <Redirect to="/" />
+          }
+        </Route>
+        <Route path='/users'>
+          {
+            loggedUser
+              ? (usersLoaded ? <Users /> : <Redirect to="/" />)
+              : <Redirect to="/login" />
+          }
+        </Route>
+        <Route path='/'>
+          {
+            loggedUser
+              ? <Blogs />
+              : <Redirect to="/login" />
           }
         </Route>
       </Switch>

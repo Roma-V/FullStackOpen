@@ -4,21 +4,15 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,  Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { logout } from '../reducers/loginReducer.js'
-import { initBlogs, createBlog, likeBlog, deleteBlog } from '../reducers/blogReducer.js'
+import { initBlogs, createBlog, likeBlog, addComment, deleteBlog } from '../reducers/blogReducer.js'
 
 import Togglable from './Togglable.js'
 
-export const Blogs = ({ username }) => {
+export const Blogs = () => {
   const dispatch = useDispatch()
-
-  // Fetch blogs from API
-  useEffect(() => {
-    dispatch(initBlogs())
-  }, [])
 
   // Store
   const blogs = useSelector(state => state.blogs)
@@ -29,10 +23,6 @@ export const Blogs = ({ username }) => {
   return (
     <div>
       <h2>Blogs</h2>
-      <div>
-        {username} logged in
-        <button type="submit" onClick={() => dispatch(logout())}>logout</button>
-      </div>
       <Togglable
         buttonLabel1='new blog'
         buttonLabel2='cancel'
@@ -74,6 +64,23 @@ export const BlogDetails = ({ blogId }) => {
 
   const blog = useSelector(state => state.blogs.find(blog => blog.id === blogId))
 
+  const deleteHandler = (event) => {
+    event.preventDefault()
+
+    dispatch(deleteBlog(blog))
+  }
+
+  const commentHandler = (event) => {
+    event.preventDefault()
+    const comment = event.target[0].value
+
+    dispatch(addComment(blogId, comment))
+
+    event.target[0].value = ''
+  }
+
+  if (!blog) return <Redirect to="/" />
+
   return (
     <div>
       <h2>{blog.title}</h2>
@@ -87,7 +94,18 @@ export const BlogDetails = ({ blogId }) => {
       <div>
           Creator: {blog.user.username}
       </div>
-      <button onClick={() => dispatch(deleteBlog(blog))}>remove</button>
+      <button onClick={deleteHandler}>remove</button>
+      <h3>Comments</h3>
+      <form onSubmit={commentHandler}>
+        <input
+          type="text"
+          name="comment"
+        />
+        <button id="newCommentButton" type="submit">add comment</button>
+      </form>
+      {blog.comments.map(comment =>
+        <li key={comment.id}>{comment.content}</li>
+      )}
     </div>
   )
 }

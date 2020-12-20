@@ -149,3 +149,4 @@ The blog list app from part 5 is refactored to use:
 - Redux
 - Individual views
 - React Router
+- Commenting functionality
