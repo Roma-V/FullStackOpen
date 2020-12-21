@@ -3,17 +3,26 @@
  * @author Roman Vasilyev
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link,  Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { initBlogs, createBlog, likeBlog, addComment, deleteBlog } from '../reducers/blogReducer.js'
+import { createBlog, likeBlog, addComment, deleteBlog } from '../reducers/blogReducer.js'
 
 import Togglable from './Togglable.js'
 
-export const Blogs = () => {
-  const dispatch = useDispatch()
+import {
+  TableContainer,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TextField,
+  Paper,
+  Button
+} from '@material-ui/core'
 
+export const Blogs = () => {
   // Store
   const blogs = useSelector(state => state.blogs)
 
@@ -30,31 +39,18 @@ export const Blogs = () => {
         <NewBlog visibilityHandle={() => newBlogFormRef.current.toggleVisibility()}/>
       </Togglable>
       <div>The blog posts in database:</div>
-      {blogs.map(blog =>
-        <Blog key={blog.id}
-          blog={blog} />
-      )}
-    </div>
-  )
-}
-
-const Blog = ({ blog }) => {
-  // Handle visibility
-  const blogRef = React.createRef()
-
-  // Visual style
-  const blogStyle = {
-    backgroundColor: 'Cornsilk',
-    border: 'solid',
-    borderWidth: 1,
-    borderColor: 'Burlywood',
-    borderRadius: '5px',
-    padding: 5
-  }
-
-  return (
-    <div className="blog" style={blogStyle}>
-      {blog.author}: <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {blogs.map(blog =>
+              <TableRow key={blog.id}>
+                <TableCell><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></TableCell>
+                <TableCell>{blog.author}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
@@ -84,28 +80,62 @@ export const BlogDetails = ({ blogId }) => {
   return (
     <div>
       <h2>{blog.title}</h2>
-      <div>
-          URL: <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
-      </div>
-      <div className="likes">
-          Likes: {blog.likes}
-        <button className="likeButton" onClick={() => dispatch(likeBlog(blog))}>like</button>
-      </div>
-      <div>
-          Creator: {blog.user.username}
-      </div>
-      <button onClick={deleteHandler}>remove</button>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            <TableRow key='url'>
+              <TableCell>URL</TableCell>
+              <TableCell>
+                <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
+              </TableCell>
+            </TableRow>
+            <TableRow key='likes'>
+              <TableCell>Likes</TableCell>
+              <TableCell align='left'>
+                {blog.likes}
+              </TableCell>
+              <TableCell align='right'>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => dispatch(likeBlog(blog))}
+                >
+                  like
+                </Button>
+              </TableCell>
+            </TableRow>
+            <TableRow key='author'>
+              <TableCell>Author</TableCell>
+              <TableCell>
+                {blog.user.username}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={deleteHandler}
+      >
+        remove
+      </Button>
       <h3>Comments</h3>
       <form onSubmit={commentHandler}>
-        <input
-          type="text"
-          name="comment"
-        />
-        <button id="newCommentButton" type="submit">add comment</button>
+        <TextField label="comment" />
+        <Button variant="contained" color="primary" type="submit">add comment</Button>
       </form>
-      {blog.comments.map(comment =>
-        <li key={comment.id}>{comment.content}</li>
-      )}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {blog.comments.map(comment =>
+              <TableRow key={comment.id}>
+                <TableCell>{comment.content}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
@@ -141,33 +171,28 @@ const NewBlog = ({ visibilityHandle }) => {
     <div>
       <form onSubmit={addBlogHandler}>
         <div>
-          Title
-          <input
-            type="text"
-            name="Title"
+          <TextField
+            label='Title'
+            fullWidth={true}
             value={newTitle}
             onChange={({ target }) => setNewTitle(target.value)}
           />
         </div>
         <div>
-          Author
-          <input
-            type="text"
-            name="Author"
+          <TextField label='Author'
+            fullWidth={true}
             value={newAuthor}
             onChange={({ target }) => setNewAuthor(target.value)}
           />
         </div>
         <div>
-          URL
-          <input
-            type="text"
-            name="URL"
+          <TextField label='URL'
+            fullWidth={true}
             value={newUrl}
             onChange={({ target }) => setNewUrl(target.value)}
           />
         </div>
-        <button id="newBlogButton" type="submit">create</button>
+        <Button variant="contained" color="primary" type="submit">create</Button>
       </form>
     </div>
   )

@@ -3,8 +3,20 @@
  * @author Roman Vasilyev
  */
 
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+
+import {
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow,
+  Paper,
+  Button
+} from '@material-ui/core'
 
 export const Users = () => {
   // Store
@@ -13,22 +25,26 @@ export const Users = () => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <td></td>
-            <td><b>blogs created</b></td>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user =>
-            <tr key={user.id}>
-              <td><Link to={`/users/${user.id}`}>{user.username}</Link></td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>User</TableCell>
+              <TableCell>blogs created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map(user =>
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Link to={`/users/${user.id}`}>{user.username}</Link>
+                </TableCell>
+                <TableCell>{user.blogs.length}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
@@ -43,9 +59,19 @@ export const UserDetails = ({ userId }) => {
     <div>
       <h2>{user.username}</h2>
       <h3>added {user.blogs.length} blogs</h3>
-      {user.blogs.map(blog =>
-        <li key={blog.id}>{blog.title}</li>
-      )}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {user.blogs.map(blog =>
+              <TableRow key={blog.id}>
+                <TableCell>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

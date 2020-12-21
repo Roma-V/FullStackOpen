@@ -21,6 +21,34 @@ import { Users, UserDetails } from './components/Users.js'
 import { Blogs, BlogDetails } from './components/Blog.js'
 import Login from './components/Login.js'
 
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+  Container,
+  ThemeProvider
+} from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core/styles'
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#33ab9f  ',
+      main: '#009688',
+      dark: '#00695f',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff6333',
+      main: '#ff3d00',
+      dark: '#b22a00',
+      contrastText: '#fff',
+    },
+  },
+})
+
 /*
  * Main App component
  */
@@ -56,68 +84,68 @@ const App = () => {
     }
   }, [])
 
-  // NavBar stype
-  const navBarSyle = {
-    padding: 5,
-    display: 'inline'
-  }
-
   /*
    * 3. Rendering
    */
   return (
-    <div>
-      <div>
-        <NavLink to='/' style={navBarSyle}>Blogs</NavLink>
-        <NavLink to='/users' style={navBarSyle}>Users</NavLink>
-        {
-          loggedUser === null
-            ? ''
-            : <div style={navBarSyle}>
-              {loggedUser.username} logged in
-              <button type="submit" onClick={() => dispatch(logout())}>logout</button>
-            </div>
-        }
-      </div>
-      <Notification />
-      <Switch>
-        <Route path='/login'>
+    <ThemeProvider theme={theme}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+          </IconButton>
+          <Button color="inherit" component={NavLink} to='/' >Blogs</Button>
+          <Button color="inherit" component={NavLink} to='/users' >Users</Button>
           {
             loggedUser === null
-              ? <Login />
-              : <Redirect to="/" />
+              ? ''
+              : <Typography>
+                {loggedUser.username} logged in
+                <Button edge="end" color="inherit" type="submit" onClick={() => dispatch(logout())}>Logout</Button>
+              </Typography>
           }
-        </Route>
-        <Route path='/users/:id'>
-          {
-            usersLoaded
-              ? <UserDetails userId={userPath ? userPath.params.id: null} />
-              : <Redirect to="/" />
-          }
-        </Route>
-        <Route path='/blogs/:id'>
-          {
-            blogsLoaded
-              ? <BlogDetails blogId={blogPath ? blogPath.params.id: null} />
-              : <Redirect to="/" />
-          }
-        </Route>
-        <Route path='/users'>
-          {
-            loggedUser
-              ? (usersLoaded ? <Users /> : <Redirect to="/" />)
-              : <Redirect to="/login" />
-          }
-        </Route>
-        <Route path='/'>
-          {
-            loggedUser
-              ? <Blogs />
-              : <Redirect to="/login" />
-          }
-        </Route>
-      </Switch>
-    </div>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <Notification />
+        <Switch>
+          <Route path='/login'>
+            {
+              loggedUser === null
+                ? <Login />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route path='/users/:id'>
+            {
+              loggedUser && usersLoaded
+                ? <UserDetails userId={userPath ? userPath.params.id: null} />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route path='/blogs/:id'>
+            {
+              loggedUser && blogsLoaded
+                ? <BlogDetails blogId={blogPath ? blogPath.params.id: null} />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route path='/users'>
+            {
+              loggedUser && usersLoaded
+                ? <Users />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route path='/'>
+            {
+              loggedUser
+                ? <Blogs />
+                : <Redirect to="/login" />
+            }
+          </Route>
+        </Switch>
+      </Container>
+    </ThemeProvider>
   )
 }
 

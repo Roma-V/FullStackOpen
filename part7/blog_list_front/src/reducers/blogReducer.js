@@ -50,7 +50,7 @@ export const createBlog = (blog) => {
       data: savedBlog
     })
 
-    dispatch(notify(`Added: "${savedBlog.title}"`, 'notification'))
+    dispatch(notify(`Added: "${savedBlog.title}"`, 'success'))
   }
 }
 
@@ -70,7 +70,7 @@ export const likeBlog = (blogToUpdate) => {
       data: savedBlog
     })
 
-    dispatch(notify(`Upvote: "${savedBlog.title}"`, 'notification'))
+    dispatch(notify(`Upvote: "${savedBlog.title}"`, 'success'))
   }
 }
 
@@ -87,7 +87,7 @@ export const addComment = (blogId, comment) => {
       data: savedBlog
     })
 
-    dispatch(notify(`Commented: "${savedBlog.title}"`, 'notification'))
+    dispatch(notify(`Commented: "${savedBlog.title}"`, 'success'))
   }
 }
 
@@ -104,7 +104,7 @@ export const deleteBlog = blog => {
       data: blog.id
     })
 
-    dispatch(notify(`Deleted: "${blog.title}"`, 'notification'))
+    dispatch(notify(`Deleted: "${blog.title}"`, 'success'))
   }
 }
 

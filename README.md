@@ -143,10 +143,11 @@ Exercise 7.8\
 [ultimate-hooks](part7/ultimate-hooks)
 The notes app combined with phonebook. The app utilizes a general purpose service for communication with the server for both notes and persons. The service is accessed through a custom hook.
 
-Ex. 7.9-7.21\
+Ex. 7.9-7.20\
 [bloglist_frontend](part7/blog_list_front)\
 The blog list app from part 5 is refactored to use:
 - Redux
 - Individual views
 - React Router
 - Commenting functionality
+- Styling based on material-ui library

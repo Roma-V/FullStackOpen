@@ -3,10 +3,15 @@
  * @author Roman Vasilyev
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { login } from '../reducers/loginReducer.js'
+
+import {
+  TextField,
+  Button
+} from '@material-ui/core'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -25,20 +30,12 @@ const Login = () => {
       <h2>Log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
-            username
-          <input
-            type="text"
-            name="Username"
-          />
+          <TextField label='username' />
         </div>
         <div>
-            password
-          <input
-            type="password"
-            name="Password"
-          />
+          <TextField label='password' type='password' />
         </div>
-        <button id="newUserButton" type="submit">login</button>
+        <Button variant="contained" color="primary" type="submit">login</Button>
       </form>
     </div>
   )
