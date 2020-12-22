@@ -4,6 +4,7 @@
  */
 
 const { ApolloServer, gql } = require('apollo-server')
+const { v4: uuid } = require('uuid');
 
 let authors = [
   {
@@ -89,12 +90,97 @@ let books = [
 ]
 
 const typeDefs = gql`
+  type Author {
+    name: String!,
+    id: ID!,
+    born: Int,
+    bookCount: Int!
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: String!
+    id: ID!
+    genres: [String!]!
+  }
+
   type Query {
+    bookCount: Int!
+    authorCount: Int!
+    allBooks(
+        genre: String,
+        author: String
+        ): [Book!]!
+    allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+        title: String!
+        author: String!
+        published: Int!,
+        genres: [String]
+    ): Book
+    editAuthor(
+        name: String!,
+        setBornTo: Int!
+    ): Author
   }
 `
 
 const resolvers = {
   Query: {
+    bookCount: () => books,
+    authorCount: () => authors.length,
+    allBooks: (root, args) => {
+        return books
+            .filter(book => args.author 
+                ? book.author === args.author
+                : book
+            )
+            .filter(book => args.genre 
+                ? book.genres.includes(args.genre)
+                : book
+            )
+    },
+    allAuthors: () => authors,
+  },
+  Author: {
+    bookCount: (root) => {
+        return books
+            .filter(book => book.author === root.name)
+            .length
+    }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+        // Handle new Author
+        if (!authors.find(author => author.name === args.author)) {
+            authors.push( {
+                name: args.author,
+                bord: null,
+                id: uuid()
+            })
+        }
+
+        // Handle new book
+        const book = { ...args, id: uuid() }
+        books = books.concat(book)
+        return book
+    },
+    editAuthor: (root, args) => {
+        if (authors.find(author => author.name === args.name)) {
+            authors = authors.map(author => {
+                if (author.name === args.name)
+                    author.born = args.setBornTo
+                return author
+            })
+    
+            return authors.find(author => author.name === args.name)
+        }
+        else return null
+    }
   }
 }
 
