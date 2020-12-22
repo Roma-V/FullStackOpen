@@ -1,0 +1,15 @@
+{
+  "name": "library",
+  "version": "0.0.1",
+  "description": "GraphQL Exercises",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Vasilyev",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.19.0",
+    "graphql": "^15.4.0"
+  }
+}

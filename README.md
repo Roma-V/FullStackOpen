@@ -151,3 +151,7 @@ The blog list app from part 5 is refactored to use:
 - React Router
 - Commenting functionality
 - Styling based on material-ui library
+
+# Part 8
+Exercises 8.1-8.7\
+[library](part8/library)
