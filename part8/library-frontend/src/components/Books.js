@@ -2,6 +2,7 @@
  * @file Books component for Library Frontend App.
  * @author Roman Vasilyev
  */
+
 import React from 'react'
 
 import { useQuery } from '@apollo/client'

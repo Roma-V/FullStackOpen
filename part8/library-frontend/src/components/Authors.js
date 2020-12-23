@@ -2,11 +2,12 @@
  * @file Authors component for Library Frontend App.
  * @author Roman Vasilyev
  */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
 
-import { useQuery } from '@apollo/client'
+import { useQuery , useMutation} from '@apollo/client'
 
-import { ALL_AUTHORS } from '../queries.js'
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 
 const Authors = (props) => {
   const { loading, error, data } = useQuery(ALL_AUTHORS)
@@ -40,7 +41,68 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+      <AuthorForm authors={data.allAuthors} />
+    </div>
+  )
+}
 
+const AuthorForm = ({ authors }) => {
+  const names = authors.map(author => {
+    return {
+      value: author.name,
+      label: author.name
+    }
+  })
+
+  const [name, setName] = useState(null)
+  const [born, setBorn] = useState('')
+
+  const [editAuthor, result] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [ { query: ALL_AUTHORS } ],
+    onError: (error) => {
+      console.log(error)
+    }
+  })
+
+  useEffect(() => {
+    if (result.data && result.data.editAuthor === null) {
+      console.log('The author not found')
+    }
+  }, [result.data])
+
+  const submit = async (event) => {
+    event.preventDefault()
+    
+    editAuthor({ 
+      variables: { 
+        name: name.value,
+        setBornTo: parseInt(born)
+      } 
+    })
+
+    setName(null)
+    setBorn('')
+  }
+
+  return (
+    <div>
+      <form onSubmit={submit}>
+        <Select
+          value={name}
+          onChange={option => setName(option)}
+          options={names}
+        />
+        <div>
+          born
+          <input
+            type='number'
+            value={born}
+            onChange={({ target }) => setBorn(target.value)}
+          />
+        </div>
+        
+        <button type='submit'>update author</button>
+      </form>
     </div>
   )
 }

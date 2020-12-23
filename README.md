@@ -168,4 +168,7 @@ Mutations are provided for:
 
 Exercises 8.8-8.12\
 [library_frontend](part8/library-frontend)\
-A book library frontend with ApolloClient.
+A book library frontend with ApolloClient that fetch data from backend as implemented in the previous subpart. The app contains three views:
+- list of authors (also handles update of an author birthdate);
+- list of books;
+- a from to add a new book.
