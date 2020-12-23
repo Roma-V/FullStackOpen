@@ -154,7 +154,7 @@ The blog list app from part 5 is refactored to use:
 
 # Part 8
 Exercises 8.1-8.7\
-[library](part8/library)
+[library_backend](part8/library_backend)\
 A book library backend based off GraphQL and ApolloServer. The library stores information about books and authors.\
 A user can query for:
 - book count;
@@ -165,3 +165,7 @@ A user can query for:
 Mutations are provided for:
 - book addition to the library (if auther is not in the library he/she will be added as well);
 - edit author record by providing a new born date.
+
+Exercises 8.8-8.12\
+[library_frontend](part8/library-frontend)\
+A book library frontend with ApolloClient.
