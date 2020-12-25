@@ -153,18 +153,23 @@ The blog list app from part 5 is refactored to use:
 - Styling based on material-ui library
 
 # Part 8
-Exercises 8.1-8.7\
+Exercises 8.1-8.7, 8.13-8.16\
 [library_backend](part8/library_backend)\
 A book library backend based off GraphQL and ApolloServer. The library stores information about books and authors.\
 A user can query for:
+- currently logged user
 - book count;
 - author count;
 - books with optional filters by author name and book genre;
 - authors.
 
 Mutations are provided for:
+- creation of a new user;
+- login with return of authorization token
 - book addition to the library (if auther is not in the library he/she will be added as well);
 - edit author record by providing a new born date.
+
+The data is stored in a MongoDB database.
 
 Exercises 8.8-8.12\
 [library_frontend](part8/library-frontend)\
