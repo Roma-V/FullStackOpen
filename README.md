@@ -171,9 +171,11 @@ Mutations are provided for:
 
 The data is stored in a MongoDB database.
 
-Exercises 8.8-8.12\
+Exercises 8.8-8.12, 8.17-8.20\
 [library_frontend](part8/library-frontend)\
 A book library frontend with ApolloClient that fetch data from backend as implemented in the previous subpart. The app contains three views:
 - list of authors (also handles update of an author birthdate);
 - list of books;
 - a from to add a new book.
+
+A user can login in order to gain capability to edit author data and add new books.

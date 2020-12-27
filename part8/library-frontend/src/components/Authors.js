@@ -9,15 +9,22 @@ import { useQuery , useMutation} from '@apollo/client'
 
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 
+/*
+ * A list of authors in database
+ */
 const Authors = (props) => {
+  // Queries
   const { loading, error, data } = useQuery(ALL_AUTHORS)
-  if (loading) return <div>Loading ...</div>
-  if (error) return `Error! ${error.message}`
 
+  // Conditional render
   if (!props.show) {
     return null
   }
 
+  if (loading) return <div>Loading ...</div>
+  if (error) return `Error! ${error.message}`
+
+  // Main render
   return (
     <div>
       <h2>authors</h2>
@@ -41,12 +48,21 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <AuthorForm authors={data.allAuthors} />
+      {
+        props.user
+          ? <AuthorForm authors={data.allAuthors} />
+          : ''
+      }
+      
     </div>
   )
 }
 
+/*
+ * A form that allows edit athour birth year
+ */
 const AuthorForm = ({ authors }) => {
+  // Options for Select component
   const names = authors.map(author => {
     return {
       value: author.name,
@@ -54,9 +70,11 @@ const AuthorForm = ({ authors }) => {
     }
   })
 
+  // The data used for querying
   const [name, setName] = useState(null)
   const [born, setBorn] = useState('')
 
+  // Qeries
   const [editAuthor, result] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [ { query: ALL_AUTHORS } ],
     onError: (error) => {
@@ -70,6 +88,7 @@ const AuthorForm = ({ authors }) => {
     }
   }, [result.data])
 
+  // From submit handler
   const submit = async (event) => {
     event.preventDefault()
     
@@ -84,9 +103,11 @@ const AuthorForm = ({ authors }) => {
     setBorn('')
   }
 
+  // Render
   return (
     <div>
       <form onSubmit={submit}>
+        <h4>Update an author:</h4>
         <Select
           value={name}
           onChange={option => setName(option)}
