@@ -153,7 +153,7 @@ The blog list app from part 5 is refactored to use:
 - Styling based on material-ui library
 
 # Part 8
-Exercises 8.1-8.7, 8.13-8.16\
+Exercises 8.1-8.7, 8.13-8.16, 8.23, 8.26\
 [library_backend](part8/library_backend)\
 A book library backend based off GraphQL and ApolloServer. The library stores information about books and authors.\
 A user can query for:
@@ -169,13 +169,15 @@ Mutations are provided for:
 - book addition to the library (if auther is not in the library he/she will be added as well);
 - edit author record by providing a new born date.
 
-The data is stored in a MongoDB database.
+The data is stored in a MongoDB database.\
+New book addition is handled by subscription ensuring all client get notified of the change.
 
-Exercises 8.8-8.12, 8.17-8.20\
+Exercises 8.8-8.12, 8.17-8.20, 8.23\
 [library_frontend](part8/library-frontend)\
 A book library frontend with ApolloClient that fetch data from backend as implemented in the previous subpart. The app contains three views:
 - list of authors (also handles update of an author birthdate);
 - list of books;
 - a from to add a new book.
 
-A user can login in order to gain capability to edit author data and add new books.
+A user can login in order to gain capability to edit author data and add new books.\
+When a new book is added the client is notified via its subscribtion to the event.

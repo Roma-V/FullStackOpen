@@ -6,17 +6,26 @@
 import React, { useState } from 'react'
 import Select from 'react-select'
 
-import { useQuery } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 
-import { ALL_BOOKS } from '../queries.js'
+import { ALL_BOOKS, BOOK_ADDED } from '../queries.js'
 
-const Books = ({ show, user}) => {
+const Books = ({ show, user, updateCacheWith }) => {
   // States
   const [genre, setGenre] = useState(null)
   const [favorite, setFavorite] = useState(false)
   
-  //Queries
+  // Queries
   const { loading, error, data: books } = useQuery(ALL_BOOKS)
+
+  // subscriptions
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      console.log(`${addedBook.title} added`)
+      updateCacheWith(addedBook)
+    }
+  })
 
   // Conditional render
   if (!show) {
