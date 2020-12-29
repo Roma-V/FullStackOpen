@@ -7,12 +7,13 @@ import React, { useState } from 'react'
 import Notification from './components/Notification.js'
 import Authors from './components/Authors.js'
 import Books from './components/Books.js'
+import Recommendations from './components/Recommendations.js'
 import NewBook from './components/NewBook.js'
 import Login from './components/Login.js'
 
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useLazyQuery } from '@apollo/client'
 
-import { ME, ALL_BOOKS } from './queries.js'
+import { ME, FAVORITE_BOOKS, ALL_BOOKS } from './queries.js'
 
 const tokenPath = 'library-user-token'
 
@@ -22,7 +23,17 @@ const tokenPath = 'library-user-token'
 const App = () => {
   const client = useApolloClient()
 
+  // Queries
   const { data: userData, refetch: refetchUser } = useQuery(ME)
+  const favoriteGenre = userData ? userData.me.favoriteGenre : ''
+  const [loadFavoriteBooks, favoriteBooks] = useLazyQuery(
+    FAVORITE_BOOKS,
+    { 
+      variables: { genre: favoriteGenre }
+    }
+  )
+
+  // States
   const [page, setPage] = useState('authors')
   const [user, setUser] = useState(
     localStorage.getItem(tokenPath) || null
@@ -31,6 +42,7 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState(notificationDefaultType)
 
+  // Event handlers
   const hideNotification = () => {
     setNotificationMessage(null)
     setNotificationType(notificationDefaultType)
@@ -61,19 +73,34 @@ const App = () => {
       set.map(p => p.id).includes(object.id)  
 
     const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    console.log(includedIn(dataInStore.allBooks, addedBook))
     if (!includedIn(dataInStore.allBooks, addedBook)) {
       client.writeQuery({
         query: ALL_BOOKS,
-        data: { allBooks : dataInStore.allBooks.concat(addedBook) }
+        data: {
+          ...dataInStore,
+          allBooks : dataInStore.allBooks.concat(addedBook)
+        }
       })
-    }   
+    }
   }
 
+  // Render
   return (
     <div>
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
+        {
+          user
+            ? <button onClick={() => {
+                loadFavoriteBooks()
+                setPage('recommendations')
+              }}>
+                recommendations
+              </button>
+            : ''
+        }
         { user ? <button onClick={() => setPage('add')}>add book</button> : '' }
         {
           !user
@@ -93,8 +120,13 @@ const App = () => {
 
       <Books
         show={page === 'books'}
-        user={userData}
         updateCacheWith={updateCacheWith}
+      />
+
+      <Recommendations
+        show={page === 'recommendations'}
+        favoriteBooks={favoriteBooks}
+        favoriteGenre={favoriteGenre}
       />
 
       <NewBook

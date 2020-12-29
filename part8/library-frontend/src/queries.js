@@ -23,11 +23,20 @@ fragment BookDetails on Book {
     title
     published
     genres
+    id
 }`
 
 export const ALL_BOOKS = gql`
 query {
     allBooks {
+        ...BookDetails
+    }
+}
+${BOOK_DETAILS}`
+
+export const FAVORITE_BOOKS = gql`
+query FavoriteBooks($genre: String!) {
+    allBooks(genre: $genre) {
         ...BookDetails
     }
 }

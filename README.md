@@ -170,9 +170,9 @@ Mutations are provided for:
 - edit author record by providing a new born date.
 
 The data is stored in a MongoDB database.\
-New book addition is handled by subscription ensuring all client get notified of the change.
+New book addition is handled by subscription ensuring all clients get notified of the change.
 
-Exercises 8.8-8.12, 8.17-8.20, 8.23\
+Exercises 8.8-8.12, 8.17-8.20, 8.24-8.25\
 [library_frontend](part8/library-frontend)\
 A book library frontend with ApolloClient that fetch data from backend as implemented in the previous subpart. The app contains three views:
 - list of authors (also handles update of an author birthdate);
@@ -180,4 +180,4 @@ A book library frontend with ApolloClient that fetch data from backend as implem
 - a from to add a new book.
 
 A user can login in order to gain capability to edit author data and add new books.\
-When a new book is added the client is notified via its subscribtion to the event.
+When a new book is added the client is notified via its subscribtion to the event. Thus the state is updated even in case of a remote change bt another user.

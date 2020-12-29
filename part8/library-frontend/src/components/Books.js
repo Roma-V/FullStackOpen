@@ -10,10 +10,9 @@ import { useQuery, useSubscription } from '@apollo/client'
 
 import { ALL_BOOKS, BOOK_ADDED } from '../queries.js'
 
-const Books = ({ show, user, updateCacheWith }) => {
+const Books = ({ show, updateCacheWith }) => {
   // States
   const [genre, setGenre] = useState(null)
-  const [favorite, setFavorite] = useState(false)
   
   // Queries
   const { loading, error, data: books } = useQuery(ALL_BOOKS)
@@ -52,20 +51,6 @@ const Books = ({ show, user, updateCacheWith }) => {
   return (
     <div>
       <h2>books</h2>
-      {
-        user.me
-          ? <div>
-              Filter by your favorite genre: 
-              <input
-                type="checkbox"
-                onChange={() => {
-                  setGenre(null) 
-                  setFavorite(!favorite)
-                }}
-              ></input>
-            </div>
-          : null
-      }
       <table>
         <tbody>
           <tr>
@@ -78,7 +63,6 @@ const Books = ({ show, user, updateCacheWith }) => {
             </th>
           </tr>
           {books.allBooks
-            .filter(a => !favorite || a.genres.includes(user.me.favoriteGenre))
             .filter(a => !genre || a.genres.includes(genre.value))
             .map(a =>
             <tr key={a.title}>
@@ -89,21 +73,17 @@ const Books = ({ show, user, updateCacheWith }) => {
           )}
         </tbody>
       </table>
-      {
-        !favorite
-          ? (<div>
-              <h4>Filter by genre:</h4>
-              <Select
-                value={genre}
-                onChange={option => 
-                  option.value === noFilterOption
-                    ? setGenre(null) 
-                    : setGenre(option)}
-                options={genres}
-              />
-             </div>)
-          : null
-      }
+      <div>
+        <h4>Filter by genre:</h4>
+        <Select
+          value={genre}
+          onChange={option => 
+            option.value === noFilterOption
+              ? setGenre(null) 
+              : setGenre(option)}
+          options={genres}
+        />
+      </div>
     </div>
   )
 }
