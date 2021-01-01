@@ -181,3 +181,6 @@ A book library frontend with ApolloClient that fetch data from backend as implem
 
 A user can login in order to gain capability to edit author data and add new books.\
 When a new book is added the client is notified via its subscribtion to the event. Thus the state is updated even in case of a remote change bt another user.
+
+# Part 9
+Exercises 9.1-9.7\
