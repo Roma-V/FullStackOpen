@@ -3,7 +3,7 @@
  * @author Roman Vasilyev
  */
 
-import { calculateBmi } from './calculators'
+import { calculateBmi } from './calculators';
 
 interface BMIArguments {
     height: number,
@@ -18,7 +18,7 @@ const parseBMIArguments = (args: Array<string>): BMIArguments => {
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     } else {
         throw new Error('Provided values were not numbers!');
     }
@@ -26,4 +26,4 @@ const parseBMIArguments = (args: Array<string>): BMIArguments => {
 
 const bmiArgs = parseBMIArguments(process.argv);
 
-console.log(calculateBmi(bmiArgs.height, bmiArgs.weight))
+console.log(calculateBmi(bmiArgs.height, bmiArgs.weight));
