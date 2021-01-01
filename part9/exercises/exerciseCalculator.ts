@@ -1,60 +1,13 @@
-interface Result {
-    periodLength: number,
-    trainingDays: number,
-    success: boolean,
-    rating: number,
-    ratingDescription: string,
-    target: number,
-    average: number
-};
+/**
+ * @file Exercise efficiency calculator
+ * @author Roman Vasilyev
+ */
+
+import { calculateExercises } from './calculators'
 
 interface ExerciseArguments {
     target: number,
     exerciseHours: Array<number>
-};
-
-const ratingFromAverage = (average: number): [number, string] => {
-    let rating = 1;
-    let ratingDescription = '';
-    switch (true) {
-        case (average < 1):
-            ratingDescription = 'try harder';
-            break;
-        case (average >= 1 && average < 2):
-            rating = 2;
-            ratingDescription = 'not too bad but could be better';
-            break;
-        case (average >= 2):
-            rating = 3;
-            ratingDescription = 'great result';
-            break;
-    }
-
-    return [rating, ratingDescription]
-};
-
-const calculateExercises = (target: number, exerciseHours: Array<number>) => {
-    const periodLength = exerciseHours.length;
-    const trainingDays = exerciseHours.reduce(
-        (accumulator, currentValue) => {
-        return currentValue > 0 ? accumulator + 1 : accumulator;
-    }, 0);
-    const average = exerciseHours.reduce(
-        (total, current) => total + current,
-        0
-        ) / exerciseHours.length;
-    const [rating, ratingDescription] = ratingFromAverage(average);
-    const success = average >= target;
-    
-    return {
-        periodLength,
-        trainingDays,
-        success,
-        rating,
-        ratingDescription,
-        target,
-        average
-    };
 };
 
 const parseExcerciseArguments = (args: Array<string>): ExerciseArguments => {
