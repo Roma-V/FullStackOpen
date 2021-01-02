@@ -184,3 +184,11 @@ When a new book is added the client is notified via its subscribtion to the even
 
 # Part 9
 Exercises 9.1-9.7\
+[exercises](part9/exercises)\
+Web app backend that has two endpoints that:
+- compute boady mass index based on supplied query string;
+- rates excercise efficiency based on posted data of time spent per day.
+
+Exercises 9.8-9.13\
+[patientor_backend](part9/patientor_backend)\
+A simple medical record application for doctors who handle diagnoses and basic health information of their patients. The app provides endpoints for all diagnoses records, all patient records, as well as capability to add new patients. The latter is handled by type checking on data provided which is added to runtime memory opun validation. 
