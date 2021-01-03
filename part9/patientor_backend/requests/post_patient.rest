@@ -5,6 +5,6 @@ Content-Type: application/json
     "name": "Roman",
     "dateOfBirth": "1985-07-09",
     "ssn": "no",
-    "gender": "male",
+    "gender": "femaled",
     "occupation": "Moscow"
 }

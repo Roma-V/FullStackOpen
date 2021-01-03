@@ -191,4 +191,8 @@ Web app backend that has two endpoints that:
 
 Exercises 9.8-9.13\
 [patientor_backend](part9/patientor_backend)\
-A simple medical record application for doctors who handle diagnoses and basic health information of their patients. The app provides endpoints for all diagnoses records, all patient records, as well as capability to add new patients. The latter is handled by type checking on data provided which is added to runtime memory opun validation. 
+A simple medical record application for doctors who handle diagnoses and basic health information of their patients. The app provides endpoints for all diagnoses records, all patient records, as well as capability to add new patients. The latter is handled by type checking on data provided which is added to runtime memory opun validation.
+
+Ex. 9.14-9.15\
+[courseinfo](part9/courseinfo/)\
+A TypeScript based page that shows course information. All logic resides in [index.tsx].
