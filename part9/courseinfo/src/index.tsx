@@ -32,7 +32,12 @@ interface CoursePartThree extends CoursePartDescribed {
   exerciseSubmissionLink: string;
 }
 
-type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree;
+interface CoursePartFour extends CoursePartDescribed {
+  name: "Deepest type usage";
+  hoursSpent: number;
+}
+
+type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree | CoursePartFour;
 
 //Helper function for exhaustive type checking
 const assertNever = (value: never): never => {
@@ -63,24 +68,14 @@ const App: React.FC = () => {
       exerciseCount: 14,
       description: "Confusing description",
       exerciseSubmissionLink: "https://fake-exercise-submit.made-up-url.dev"
+    },
+    {
+      name: "Deepest type usage",
+      exerciseCount: 1,
+      description: "A custom type practice",
+      hoursSpent: 1
     }
   ];
-
-  courseParts.forEach(part => {
-    switch (part.name) {
-      case "Fundamentals":
-        // P1
-        break;
-      case "Using props to pass data":
-        // P2
-        break;
-        // P3
-      case "Deeper type usage":
-        break;
-      // default:
-        // return assertNever(part);
-    }
-  });
 
   return (
     <div>
@@ -124,8 +119,15 @@ const Part: React.FC<{ part: CoursePart }> = ({ part }) => {
       return (
       <p>
         <PartCommon name={part.name} exerciseCount={part.exerciseCount} />
-        {part.description}<br />
+        <PartDescription description={part.description} />
         <a href={part.exerciseSubmissionLink}>{part.exerciseSubmissionLink}</a>
+      </p>)
+    case "Deepest type usage":
+      return (
+      <p>
+        <PartCommon name={part.name} exerciseCount={part.exerciseCount} />
+        <PartDescription description={part.description} />
+        {"Hours spent on exercise: "}{part.hoursSpent}
       </p>)
     default:
       return assertNever(part);
