@@ -5,7 +5,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Patient, PublicPatient, Gender } from '../types';
+import { Patient, PublicPatient, Gender, Entry } from '../types';
 // import patients from '../../data/patients';
 import { toNewPatient } from '../utils/patientParser';
 
@@ -158,11 +158,28 @@ const addPatient = (patient: any): Patient => {
 };
 
 /*
+ * Updater
+ */
+const addEntryToPatient = (id: string, entry: Entry): boolean => {
+  const foundPatient = patients.find(p => p.id === id);
+
+  if (!foundPatient) return false;
+
+  patients.map(p => {
+    if (p.id === id)
+      p.entries.push(entry);
+  });
+
+  return true;
+};
+
+/*
  * Exports
  */
 export default {
     getPatient,
     getPatientShort,
     getPatientById,
-    addPatient
+    addPatient,
+    addEntryToPatient
 };
