@@ -38,7 +38,7 @@ export const toNewEntry = (object: any): Entry | null => {
                 employerName: parseString(object.employerName)
             };
 
-            if (object.sickLeave)
+            if (object.sickLeave && object.sickLeave.startDate && object.sickLeave.endDate)
                 newEntry.sickLeave = {
                     startDate: parseDate(object.sickLeave.startDate),
                     endDate: parseDate(object.sickLeave.endDate)
@@ -65,14 +65,14 @@ export const toNewEntry = (object: any): Entry | null => {
  */
 const parseString = (description: any): string => {
     if (!description || !isString(description)) {
-        throw new Error('Incorrect or missing name: ' + description);
+        throw new Error('Incorrect or missing string value: ' + description);
     }
     return description;
 };
 
 const parseDate = (date: any): string => {
     if (!date || !isString(date) || !isDate(date)) {
-        throw new Error('Incorrect or missing birth date: ' + date);
+        throw new Error('Incorrect or missing date: ' + date);
     }
     return date;
 };
@@ -105,5 +105,6 @@ const isDate = (param: string): boolean => {
 };
 
 const isHealthCheckRating = (param: any): param is HealthCheckRating => {
-    return Object.values(HealthCheckRating).includes(param);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    return typeof param.toString === 'function' && Object.values(HealthCheckRating).map(v => v.toString()).includes(param.toString());
 };
